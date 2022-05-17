@@ -21,106 +21,6 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
   int? _selectedIndex;
 
   @override
-  void initState() {
-    super.initState();
-    _lastSelectedIndex = 0;
-    _selectedIndex = 0;
-    _animationControllerList = List<AnimationController>.empty(growable: true);
-    _animationList = List<Animation<Offset>>.empty(growable: true);
-
-    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
-      _animationControllerList.add(AnimationController(
-          duration:
-              widget.navBarEssentials!.itemAnimationProperties?.duration ??
-                  Duration(milliseconds: 400),
-          vsync: this));
-      _animationList.add(Tween(
-              begin: Offset(0, widget.navBarEssentials!.navBarHeight! / 1.5),
-              end: Offset(0, 0.0))
-          .chain(CurveTween(
-              curve: widget.navBarEssentials!.itemAnimationProperties?.curve ??
-                  Curves.ease))
-          .animate(_animationControllerList[i]));
-    }
-
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _animationControllerList[_selectedIndex!].forward();
-    });
-  }
-
-  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected,
-      double? height, int itemIndex) {
-    double itemWidth = ((MediaQuery.of(context).size.width -
-            ((widget.navBarEssentials!.padding?.left ??
-                    MediaQuery.of(context).size.width * 0.05) +
-                (widget.navBarEssentials!.padding?.right ??
-                    MediaQuery.of(context).size.width * 0.05))) /
-        widget.navBarEssentials!.items!.length);
-    return widget.navBarEssentials!.navBarHeight == 0
-        ? SizedBox.shrink()
-        : AnimatedBuilder(
-            animation: _animationList[itemIndex],
-            builder: (context, child) => Container(
-              width: 150.0,
-              height: height,
-              child: Container(
-                alignment: Alignment.center,
-                height: height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: IconTheme(
-                        data: IconThemeData(
-                            size: item.iconSize,
-                            color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : item.inactiveColorPrimary == null
-                                    ? item.activeColorPrimary
-                                    : item.inactiveColorPrimary),
-                        child: isSelected
-                            ? item.icon
-                            : item.inactiveIcon ?? item.icon,
-                      ),
-                    ),
-                    item.title == null
-                        ? SizedBox.shrink()
-                        : Transform.translate(
-                            offset: _animationList[itemIndex].value,
-                            child: AnimatedContainer(
-                              duration: widget.navBarEssentials!
-                                      .itemAnimationProperties?.duration ??
-                                  Duration(milliseconds: 400),
-                              height: 5.0,
-                              width: itemWidth * 0.8,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  color: isSelected
-                                      ? (item.activeColorSecondary == null
-                                          ? item.activeColorPrimary
-                                          : item.activeColorSecondary)
-                                      : Colors.transparent),
-                            ),
-                          ),
-                  ],
-                ),
-              ),
-            ),
-          );
-  }
-
-  @override
-  void dispose() {
-    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
-      _animationControllerList[i].dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (widget.navBarEssentials!.items!.length !=
         _animationControllerList.length) {
@@ -196,5 +96,105 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
         }).toList(),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
+      _animationControllerList[i].dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _lastSelectedIndex = 0;
+    _selectedIndex = 0;
+    _animationControllerList = List<AnimationController>.empty(growable: true);
+    _animationList = List<Animation<Offset>>.empty(growable: true);
+
+    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
+      _animationControllerList.add(AnimationController(
+          duration:
+              widget.navBarEssentials!.itemAnimationProperties?.duration ??
+                  Duration(milliseconds: 400),
+          vsync: this));
+      _animationList.add(Tween(
+              begin: Offset(0, widget.navBarEssentials!.navBarHeight! / 1.5),
+              end: Offset(0, 0.0))
+          .chain(CurveTween(
+              curve: widget.navBarEssentials!.itemAnimationProperties?.curve ??
+                  Curves.ease))
+          .animate(_animationControllerList[i]));
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animationControllerList[_selectedIndex!].forward();
+    });
+  }
+
+  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected,
+      double? height, int itemIndex) {
+    double itemWidth = ((MediaQuery.of(context).size.width -
+            ((widget.navBarEssentials!.padding?.left ??
+                    MediaQuery.of(context).size.width * 0.05) +
+                (widget.navBarEssentials!.padding?.right ??
+                    MediaQuery.of(context).size.width * 0.05))) /
+        widget.navBarEssentials!.items!.length);
+    return widget.navBarEssentials!.navBarHeight == 0
+        ? SizedBox.shrink()
+        : AnimatedBuilder(
+            animation: _animationList[itemIndex],
+            builder: (context, child) => Container(
+              width: 150.0,
+              height: height,
+              child: Container(
+                alignment: Alignment.center,
+                height: height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: IconTheme(
+                        data: IconThemeData(
+                            size: item.iconSize,
+                            color: isSelected
+                                ? (item.activeColorSecondary == null
+                                    ? item.activeColorPrimary
+                                    : item.activeColorSecondary)
+                                : item.inactiveColorPrimary == null
+                                    ? item.activeColorPrimary
+                                    : item.inactiveColorPrimary),
+                        child: isSelected
+                            ? item.icon
+                            : item.inactiveIcon ?? item.icon,
+                      ),
+                    ),
+                    item.title == null
+                        ? SizedBox.shrink()
+                        : Transform.translate(
+                            offset: _animationList[itemIndex].value,
+                            child: AnimatedContainer(
+                              duration: widget.navBarEssentials!
+                                      .itemAnimationProperties?.duration ??
+                                  Duration(milliseconds: 400),
+                              height: 5.0,
+                              width: itemWidth * 0.8,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  color: isSelected
+                                      ? (item.activeColorSecondary == null
+                                          ? item.activeColorPrimary
+                                          : item.activeColorSecondary)
+                                      : Colors.transparent),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }

@@ -1,6 +1,11 @@
 part of persistent_bottom_nav_bar_v2;
 
 class OffsetAnimation extends StatefulWidget {
+  final Widget? child;
+  final bool? hideNavigationBar;
+  final double? navBarHeight;
+  final bool extendedLength;
+  final Function(bool, bool)? onAnimationComplete;
   OffsetAnimation(
       {Key? key,
       this.child,
@@ -9,11 +14,6 @@ class OffsetAnimation extends StatefulWidget {
       this.onAnimationComplete,
       this.extendedLength = false})
       : super(key: key);
-  final Widget? child;
-  final bool? hideNavigationBar;
-  final double? navBarHeight;
-  final bool extendedLength;
-  final Function(bool, bool)? onAnimationComplete;
 
   @override
   _OffsetAnimationState createState() => _OffsetAnimationState();
@@ -24,6 +24,29 @@ class _OffsetAnimationState extends State<OffsetAnimation>
   late AnimationController _navBarHideAnimationController;
   late Animation<Offset> _navBarOffsetAnimation;
   bool? _hideNavigationBar;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_hideNavigationBar != null ||
+        _hideNavigationBar != widget.hideNavigationBar) {
+      _hideNavigationBar = widget.hideNavigationBar;
+      _hideAnimation();
+    }
+    return AnimatedBuilder(
+      animation: _navBarOffsetAnimation,
+      child: widget.child,
+      builder: (context, child) => Transform.translate(
+        offset: _navBarOffsetAnimation.value,
+        child: child,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _navBarHideAnimationController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -45,36 +68,13 @@ class _OffsetAnimationState extends State<OffsetAnimation>
     });
   }
 
-  @override
-  void dispose() {
-    _navBarHideAnimationController.dispose();
-    super.dispose();
-  }
-
   _hideAnimation() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_hideNavigationBar!) {
         _navBarHideAnimationController.forward();
       } else {
         _navBarHideAnimationController.reverse();
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_hideNavigationBar != null ||
-        _hideNavigationBar != widget.hideNavigationBar) {
-      _hideNavigationBar = widget.hideNavigationBar;
-      _hideAnimation();
-    }
-    return AnimatedBuilder(
-      animation: _navBarOffsetAnimation,
-      child: widget.child,
-      builder: (context, child) => Transform.translate(
-        offset: _navBarOffsetAnimation.value,
-        child: child,
-      ),
-    );
   }
 }

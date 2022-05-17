@@ -41,7 +41,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
           .animate(_animationControllerList[i]));
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationControllerList[_selectedIndex!].forward();
     });
   }
@@ -82,31 +82,28 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
                       ),
                       item.title == null
                           ? SizedBox.shrink()
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
-                              child: Material(
-                                type: MaterialType.transparency,
-                                child: FittedBox(
-                                  child: Text(
-                                    item.title!,
-                                    style: item.textStyle != null
-                                        ? (item.textStyle!.apply(
-                                            color: isSelected
-                                                ? (item.activeColorSecondary ==
-                                                        null
-                                                    ? item.activeColorPrimary
-                                                    : item.activeColorSecondary)
-                                                : item.inactiveColorPrimary))
-                                        : TextStyle(
-                                            color: isSelected
-                                                ? (item.activeColorSecondary ==
-                                                        null
-                                                    ? item.activeColorPrimary
-                                                    : item.activeColorSecondary)
-                                                : item.inactiveColorPrimary,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12.0),
-                                  ),
+                          : Material(
+                              type: MaterialType.transparency,
+                              child: FittedBox(
+                                child: Text(
+                                  item.title!,
+                                  style: item.textStyle != null
+                                      ? (item.textStyle!.apply(
+                                          color: isSelected
+                                              ? (item.activeColorSecondary ==
+                                                      null
+                                                  ? item.activeColorPrimary
+                                                  : item.activeColorSecondary)
+                                              : item.inactiveColorPrimary))
+                                      : TextStyle(
+                                          color: isSelected
+                                              ? (item.activeColorSecondary ==
+                                                      null
+                                                  ? item.activeColorPrimary
+                                                  : item.activeColorSecondary)
+                                              : item.inactiveColorPrimary,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.0),
                                 ),
                               ),
                             ),

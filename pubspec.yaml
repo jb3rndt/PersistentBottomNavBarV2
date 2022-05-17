@@ -3,10 +3,10 @@ description: A do all, highly customizable persistent/static bottom navigation b
 
 homepage: https://github.com/jb3rndt/PersistentBottomNavBarV2
 repository: https://github.com/jb3rndt/PersistentBottomNavBarV2
-version: 4.1.9
+version: 4.1.11
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:

@@ -332,7 +332,7 @@ If you want to have your own style for the navigation bar, follow these steps:
                 onItemSelected: (int) {
                     setState(() {}); // This is required to update the nav bar if Android back button is pressed
                 },
-                customWidget: CustomNavBarWidget( // Your custom widget goes here
+                customWidget: (navBarEssentials) =>CustomNavBarWidget( // Your custom widget goes here
                     items: _navBarsItems(),
                     selectedIndex: _controller.index,
                     onItemSelected: (index) {
