@@ -146,6 +146,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         icon: Icon(Icons.home),
         title: "Home",
         activeColorPrimary: Colors.blue,
+        activeColorSecondary: Colors.red,
         inactiveColorPrimary: Colors.grey,
         inactiveColorSecondary: Colors.purple,
       ),
@@ -232,7 +233,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         stateManagement: true,
-        navBarHeight: kBottomNavigationBarHeight,
+        navBarHeight: 70,
         hideNavigationBarWhenKeyboardShows: true,
         margin: EdgeInsets.all(0.0),
         popActionScreens: PopActionScreensType.all,
@@ -269,8 +270,12 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle:
-            NavBarStyle.style17, // Choose the nav bar style with this property
+        neumorphicProperties: NeumorphicProperties(
+            showSubtitleText: true,
+            shape: BoxShape.circle,
+            curveType: CurveType.flat),
+        navBarStyle: NavBarStyle
+            .neumorphic, // Choose the nav bar style with this property
       ),
     );
   }

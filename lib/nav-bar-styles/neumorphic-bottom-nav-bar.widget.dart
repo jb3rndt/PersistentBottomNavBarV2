@@ -2,17 +2,17 @@ part of persistent_bottom_nav_bar_v2;
 
 class NeumorphicBottomNavBar extends StatelessWidget {
   final NavBarEssentials? navBarEssentials;
-  final NeumorphicProperties? neumorphicProperties;
+  final NeumorphicProperties neumorphicProperties;
 
-  NeumorphicBottomNavBar(
-      {Key? key,
-      this.navBarEssentials,
-      this.neumorphicProperties = const NeumorphicProperties()});
+  NeumorphicBottomNavBar({
+    Key? key,
+    this.navBarEssentials,
+    this.neumorphicProperties = const NeumorphicProperties(),
+  });
 
   Widget _getNavItem(
           PersistentBottomNavBarItem item, bool isSelected, double? height) =>
-      this.neumorphicProperties != null &&
-              this.neumorphicProperties!.showSubtitleText
+      this.neumorphicProperties.showSubtitleText
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,12 +22,10 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                     data: IconThemeData(
                         size: item.iconSize,
                         color: isSelected
-                            ? (item.activeColorSecondary == null
-                                ? item.activeColorPrimary
-                                : item.activeColorSecondary)
-                            : item.inactiveColorPrimary == null
-                                ? item.activeColorPrimary
-                                : item.inactiveColorPrimary),
+                            ? item.activeColorSecondary ??
+                                item.activeColorPrimary
+                            : item.inactiveColorPrimary ??
+                                item.activeColorPrimary),
                     child:
                         isSelected ? item.icon : item.inactiveIcon ?? item.icon,
                   ),
@@ -37,40 +35,35 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                   child: Material(
                     type: MaterialType.transparency,
                     child: FittedBox(
-                        child: Text(
-                      item.title!,
-                      style: item.textStyle != null
-                          ? (item.textStyle!.apply(
-                              color: isSelected
-                                  ? (item.activeColorSecondary == null
-                                      ? item.activeColorPrimary
-                                      : item.activeColorSecondary)
-                                  : item.inactiveColorPrimary))
-                          : TextStyle(
-                              color: isSelected
-                                  ? (item.activeColorSecondary == null
-                                      ? item.activeColorPrimary
-                                      : item.activeColorSecondary)
-                                  : item.inactiveColorPrimary == null
-                                      ? item.activeColorPrimary
-                                      : item.inactiveColorPrimary,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12.0),
-                    )),
+                      child: Text(
+                        item.title!,
+                        style: item.textStyle != null
+                            ? (item.textStyle!.apply(
+                                color: isSelected
+                                    ? item.activeColorSecondary ??
+                                        item.activeColorPrimary
+                                    : item.inactiveColorPrimary))
+                            : TextStyle(
+                                color: isSelected
+                                    ? item.activeColorSecondary ??
+                                        item.activeColorPrimary
+                                    : item.inactiveColorPrimary ??
+                                        item.activeColorPrimary,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.0,
+                              ),
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             )
           : IconTheme(
               data: IconThemeData(
                   size: item.iconSize,
                   color: isSelected
-                      ? (item.activeColorSecondary == null
-                          ? item.activeColorPrimary
-                          : item.activeColorSecondary)
-                      : item.inactiveColorPrimary == null
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary),
+                      ? item.activeColorSecondary ?? item.activeColorPrimary
+                      : item.inactiveColorPrimary ?? item.activeColorPrimary),
               child: isSelected ? item.icon : item.inactiveIcon ?? item.icon,
             );
 
@@ -82,26 +75,17 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                 this.navBarEssentials!.selectedIndex)
             ? NeumorphicContainer(
                 decoration: NeumorphicDecoration(
-                  borderRadius: BorderRadius.circular(
-                      this.neumorphicProperties == null
-                          ? 15.0
-                          : this.neumorphicProperties!.borderRadius),
-                  color: this.navBarEssentials!.backgroundColor,
-                  border: this.neumorphicProperties == null
-                      ? null
-                      : this.neumorphicProperties!.border,
-                  shape: this.neumorphicProperties == null
-                      ? BoxShape.rectangle
-                      : this.neumorphicProperties!.shape,
+                  borderRadius: this.neumorphicProperties.borderRadius,
+                  color: isSelected
+                      ? item.activeColorPrimary.withOpacity(0.2)
+                      : this.navBarEssentials!.backgroundColor,
+                  border: this.neumorphicProperties.border,
+                  shape: this.neumorphicProperties.shape,
                 ),
-                bevel: this.neumorphicProperties == null
-                    ? 12.0
-                    : this.neumorphicProperties!.bevel,
+                bevel: this.neumorphicProperties.bevel,
                 curveType: isSelected
                     ? CurveType.emboss
-                    : this.neumorphicProperties == null
-                        ? CurveType.concave
-                        : this.neumorphicProperties!.curveType,
+                    : this.neumorphicProperties.curveType,
                 height: height! + 20,
                 width: 60.0,
                 padding: EdgeInsets.all(6.0),

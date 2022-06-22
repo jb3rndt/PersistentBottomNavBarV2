@@ -2,7 +2,7 @@ part of persistent_bottom_nav_bar_v2;
 
 class NeumorphicProperties {
   final double bevel;
-  final double borderRadius;
+  final BorderRadiusGeometry? borderRadius;
   final BoxBorder? border;
   final BoxShape shape;
   final CurveType curveType;
@@ -10,7 +10,7 @@ class NeumorphicProperties {
 
   const NeumorphicProperties({
     this.bevel = 12.0,
-    this.borderRadius = 15.0,
+    this.borderRadius,
     this.border,
     this.shape = BoxShape.rectangle,
     this.curveType = CurveType.concave,
