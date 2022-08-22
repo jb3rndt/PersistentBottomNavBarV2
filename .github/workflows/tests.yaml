@@ -33,15 +33,19 @@ jobs:
 
       - name: print path
         run: echo $GITHUB_PATH
+        shell: bash
 
       - name: Add Flutter to PATH
         run: echo "$RUNNER_TOOL_CACHE/flutter/bin" >> $GITHUB_PATH
+        shell: bash
 
       - name: print path again
         run: echo $GITHUB_PATH
+        shell: bash
 
       - name: Flutter doctor
         run: flutter doctor -v
+        shell: bash
 
       # Checkout and get packages.
       - name: Checkout
