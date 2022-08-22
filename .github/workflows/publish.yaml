@@ -1,7 +1,8 @@
 name: Publish
 on:
-  tags:
-    - "v*"
+  push:
+    tags:
+      - "v*"
 
 jobs:
   test:

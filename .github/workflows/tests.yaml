@@ -52,7 +52,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get packages
-       run: flutter pub get
+        run: flutter pub get
 
       # Analyze, check formatting, and run unit tests.
       - name: Run Unit Tests
