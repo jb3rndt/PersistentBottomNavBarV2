@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Cache
         id: cache-flutter
-        uses: actions/cache@v3.0.1
+        uses: actions/cache@v3
         with:
           path: ${{ runner.tool_cache }}/flutter
           key: flutter-${{ runner.os }}-${{ env.FLUTTER_VERSION }}
