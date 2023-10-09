@@ -4,11 +4,11 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'modal-screen.dart';
 
 class MainScreen extends StatelessWidget {
-  final Function onScreenHideButtonPressed;
+  final Function? onScreenHideButtonPressed;
   final bool hideStatus;
 
   const MainScreen({
-    Key key,
+    Key? key,
     this.onScreenHideButtonPressed,
     this.hideStatus = false,
   }) : super(key: key);
@@ -116,7 +116,7 @@ class MainScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    this.onScreenHideButtonPressed();
+                    this.onScreenHideButtonPressed?.call();
                   },
                   child: Text(
                     this.hideStatus
@@ -149,7 +149,7 @@ class MainScreen extends StatelessWidget {
 }
 
 class MainScreen2 extends StatelessWidget {
-  const MainScreen2({Key key}) : super(key: key);
+  const MainScreen2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +187,7 @@ class MainScreen2 extends StatelessWidget {
 }
 
 class MainScreen3 extends StatelessWidget {
-  const MainScreen3({Key key}) : super(key: key);
+  const MainScreen3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

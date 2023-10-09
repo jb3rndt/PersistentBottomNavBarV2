@@ -10,7 +10,8 @@ class InteractiveExample extends StatefulWidget {
 }
 
 class _InteractiveExampleState extends State<InteractiveExample> {
-  PersistentTabController _controller;
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
   bool _hideNavBar = false;
   NavBarStyle _navBarStyle = NavBarStyle.style15;
   bool _hideNavigationBarWhenKeyboardShows = true;
@@ -19,12 +20,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
   bool _handleAndroidBackButtonPress = true;
   bool _popAllScreensOnTapOfSelectedTab = true;
   bool _confineInSafeArea = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PersistentTabController(initialIndex: 0);
-  }
 
   List<Widget> _buildScreens() {
     return [
@@ -107,8 +102,10 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             },
           ),
           onPressed: (context) {
-            pushDynamicScreen(context,
-                screen: SampleModalScreen(), withNavBar: true);
+            if (context != null) {
+              pushDynamicScreen(context,
+                  screen: SampleModalScreen(), withNavBar: true);
+            }
           }),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.message),
@@ -174,10 +171,12 @@ class _InteractiveExampleState extends State<InteractiveExample> {
                       height: 2,
                       color: Colors.deepPurpleAccent,
                     ),
-                    onChanged: (NavBarStyle newStyle) {
-                      setState(() {
-                        _navBarStyle = newStyle;
-                      });
+                    onChanged: (newStyle) {
+                      if (newStyle != null) {
+                        setState(() {
+                          _navBarStyle = newStyle;
+                        });
+                      }
                     },
                     items: NavBarStyle.values
                         .map<DropdownMenuItem<NavBarStyle>>(
@@ -294,21 +293,23 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         popActionScreens: PopActionScreensType.all,
         bottomScreenMargin: 0.0,
         onWillPop: (context) async {
-          await showDialog(
-            context: context,
-            useSafeArea: true,
-            builder: (context) => Container(
-              height: 50.0,
-              width: 50.0,
-              color: Colors.white,
-              child: ElevatedButton(
-                child: Text("Close"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+          if (context != null) {
+            await showDialog(
+              context: context,
+              useSafeArea: true,
+              builder: (context) => Container(
+                height: 50.0,
+                width: 50.0,
+                color: Colors.white,
+                child: ElevatedButton(
+                  child: Text("Close"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-            ),
-          );
+            );
+          }
           return false;
         },
         hideNavigationBar: _hideNavBar,
