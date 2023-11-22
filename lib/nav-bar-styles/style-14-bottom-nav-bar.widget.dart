@@ -21,6 +21,94 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
   int? _selectedIndex;
 
   @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
+    if (widget.navBarEssentials!.items!.length !=
+        _animationControllerList.length) {
+      _animationControllerList =
+          List<AnimationController>.empty(growable: true);
+      _animationList = List<Animation<Offset>>.empty(growable: true);
+
+      for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
+        _animationControllerList.add(AnimationController(
+            duration:
+                widget.navBarEssentials!.itemAnimationProperties?.duration ??
+                    Duration(milliseconds: 400),
+            vsync: this));
+        _animationList.add(Tween(
+                begin: Offset(0, widget.navBarEssentials!.navBarHeight! / 2.0),
+                end: Offset(0, 0.0))
+            .chain(CurveTween(
+                curve:
+                    widget.navBarEssentials!.itemAnimationProperties?.curve ??
+                        Curves.ease))
+            .animate(_animationControllerList[i]));
+      }
+    }
+    if (widget.navBarEssentials!.selectedIndex != _selectedIndex) {
+      _lastSelectedIndex = _selectedIndex;
+      _selectedIndex = widget.navBarEssentials!.selectedIndex;
+      _animationControllerList[_selectedIndex!].forward();
+      _animationControllerList[_lastSelectedIndex!].reverse();
+    }
+    return Container(
+      width: double.infinity,
+      height: widget.navBarEssentials!.navBarHeight,
+      padding: EdgeInsets.only(
+          left: widget.navBarEssentials!.padding?.left ??
+              size.width * 0.04,
+          right: widget.navBarEssentials!.padding?.right ??
+              size.width * 0.04,
+          top: widget.navBarEssentials!.padding?.top ??
+              widget.navBarEssentials!.navBarHeight! * 0.12,
+          bottom: widget.navBarEssentials!.padding?.bottom ??
+              widget.navBarEssentials!.navBarHeight! * 0.03),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: widget.navBarEssentials!.items!.map((item) {
+          int index = widget.navBarEssentials!.items!.indexOf(item);
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (widget.navBarEssentials!.items![index].onPressed != null) {
+                  widget.navBarEssentials!.items![index].onPressed!(
+                      widget.navBarEssentials!.selectedScreenBuildContext);
+                } else {
+                  if (index != _selectedIndex) {
+                    _lastSelectedIndex = _selectedIndex;
+                    _selectedIndex = index;
+                    _animationControllerList[_selectedIndex!].forward();
+                    _animationControllerList[_lastSelectedIndex!].reverse();
+                  }
+                  widget.navBarEssentials!.onItemSelected!(index);
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: _buildItem(
+                    item,
+                    widget.navBarEssentials!.selectedIndex == index,
+                    widget.navBarEssentials!.navBarHeight,
+                    index),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
+      _animationControllerList[i].dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _lastSelectedIndex = 0;
@@ -50,11 +138,12 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
 
   Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected,
       double? height, int itemIndex) {
-    double itemWidth = ((MediaQuery.of(context).size.width -
-            ((widget.navBarEssentials!.padding?.left ??
-                    MediaQuery.of(context).size.width * 0.05) +
+    final size = MediaQuery.sizeOf(context);
+
+    double itemWidth = ((size.width -
+            ((widget.navBarEssentials!.padding?.left ?? size.width * 0.05) +
                 (widget.navBarEssentials!.padding?.right ??
-                    MediaQuery.of(context).size.width * 0.05))) /
+                    size.width * 0.05))) /
         widget.navBarEssentials!.items!.length);
     return widget.navBarEssentials!.navBarHeight == 0
         ? SizedBox.shrink()
@@ -138,91 +227,5 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
               ),
             ),
           );
-  }
-
-  @override
-  void dispose() {
-    for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
-      _animationControllerList[i].dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.navBarEssentials!.items!.length !=
-        _animationControllerList.length) {
-      _animationControllerList =
-          List<AnimationController>.empty(growable: true);
-      _animationList = List<Animation<Offset>>.empty(growable: true);
-
-      for (int i = 0; i < widget.navBarEssentials!.items!.length; ++i) {
-        _animationControllerList.add(AnimationController(
-            duration:
-                widget.navBarEssentials!.itemAnimationProperties?.duration ??
-                    Duration(milliseconds: 400),
-            vsync: this));
-        _animationList.add(Tween(
-                begin: Offset(0, widget.navBarEssentials!.navBarHeight! / 2.0),
-                end: Offset(0, 0.0))
-            .chain(CurveTween(
-                curve:
-                    widget.navBarEssentials!.itemAnimationProperties?.curve ??
-                        Curves.ease))
-            .animate(_animationControllerList[i]));
-      }
-    }
-    if (widget.navBarEssentials!.selectedIndex != _selectedIndex) {
-      _lastSelectedIndex = _selectedIndex;
-      _selectedIndex = widget.navBarEssentials!.selectedIndex;
-      _animationControllerList[_selectedIndex!].forward();
-      _animationControllerList[_lastSelectedIndex!].reverse();
-    }
-    return Container(
-      width: double.infinity,
-      height: widget.navBarEssentials!.navBarHeight,
-      padding: EdgeInsets.only(
-          left: widget.navBarEssentials!.padding?.left ??
-              MediaQuery.of(context).size.width * 0.04,
-          right: widget.navBarEssentials!.padding?.right ??
-              MediaQuery.of(context).size.width * 0.04,
-          top: widget.navBarEssentials!.padding?.top ??
-              widget.navBarEssentials!.navBarHeight! * 0.12,
-          bottom: widget.navBarEssentials!.padding?.bottom ??
-              widget.navBarEssentials!.navBarHeight! * 0.03),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: widget.navBarEssentials!.items!.map((item) {
-          int index = widget.navBarEssentials!.items!.indexOf(item);
-          return Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (widget.navBarEssentials!.items![index].onPressed != null) {
-                  widget.navBarEssentials!.items![index].onPressed!(
-                      widget.navBarEssentials!.selectedScreenBuildContext);
-                } else {
-                  if (index != _selectedIndex) {
-                    _lastSelectedIndex = _selectedIndex;
-                    _selectedIndex = index;
-                    _animationControllerList[_selectedIndex!].forward();
-                    _animationControllerList[_lastSelectedIndex!].reverse();
-                  }
-                  widget.navBarEssentials!.onItemSelected!(index);
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: _buildItem(
-                    item,
-                    widget.navBarEssentials!.selectedIndex == index,
-                    widget.navBarEssentials!.navBarHeight,
-                    index),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
   }
 }

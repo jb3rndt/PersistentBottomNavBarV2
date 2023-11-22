@@ -22,6 +22,8 @@ class _BottomNavStyle12State extends State<BottomNavStyle12>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
     if (widget.navBarEssentials!.items!.length !=
         _animationControllerList.length) {
       _animationControllerList =
@@ -54,10 +56,8 @@ class _BottomNavStyle12State extends State<BottomNavStyle12>
       width: double.infinity,
       height: widget.navBarEssentials!.navBarHeight,
       padding: EdgeInsets.only(
-          left: widget.navBarEssentials!.padding?.left ??
-              MediaQuery.of(context).size.width * 0.04,
-          right: widget.navBarEssentials!.padding?.right ??
-              MediaQuery.of(context).size.width * 0.04,
+          left: widget.navBarEssentials!.padding?.left ?? size.width * 0.04,
+          right: widget.navBarEssentials!.padding?.right ?? size.width * 0.04,
           top: widget.navBarEssentials!.padding?.top ??
               widget.navBarEssentials!.navBarHeight! * 0.15,
           bottom: widget.navBarEssentials!.padding?.bottom ??

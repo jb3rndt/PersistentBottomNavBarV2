@@ -371,7 +371,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isKeyboardUp = MediaQuery.of(widget.context).viewInsets.bottom > 0;
+    bool isKeyboardUp = MediaQuery.viewInsetsOf(widget.context).bottom > 0;
     _navBarHeight = (isKeyboardUp && widget.hideNavigationBarWhenKeyboardShows)
         ? 0.0
         : widget.navBarHeight ?? kBottomNavigationBarHeight;
@@ -605,6 +605,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         ],
       );
     } else if (widget.navBarStyle == NavBarStyle.style15) {
+      final size = MediaQuery.sizeOf(context);
+
       return Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -654,11 +656,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                                             .vertical
                                         : 0.0)),
                         margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width / 2 -
-                                (MediaQuery.of(context).size.width / 5.0 -
-                                        30.0) /
-                                    2),
-                        width: MediaQuery.of(context).size.width / 5.0 - 30.0,
+                            left:
+                                size.width / 2 - (size.width / 5.0 - 30.0) / 2),
+                        width: size.width / 5.0 - 30.0,
                         decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.only(
@@ -672,6 +672,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         ],
       );
     } else if (widget.navBarStyle == NavBarStyle.style16) {
+      final size = MediaQuery.sizeOf(context);
+
       return Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -721,11 +723,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                                             .vertical
                                         : 0.0)),
                         margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width / 2 -
-                                (MediaQuery.of(context).size.width / 5.0 -
-                                        30.0) /
-                                    2),
-                        width: MediaQuery.of(context).size.width / 5.0 - 30.0,
+                            left:
+                                size.width / 2 - (size.width / 5.0 - 30.0) / 2),
+                        width: size.width / 5.0 - 30.0,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                         ),

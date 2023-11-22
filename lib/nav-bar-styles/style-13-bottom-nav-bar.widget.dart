@@ -22,6 +22,8 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
     if (widget.navBarEssentials!.items!.length !=
         _animationControllerList.length) {
       _animationControllerList =
@@ -54,10 +56,8 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
       width: double.infinity,
       height: widget.navBarEssentials!.navBarHeight,
       padding: EdgeInsets.only(
-          left: widget.navBarEssentials!.padding?.left ??
-              MediaQuery.of(context).size.width * 0.04,
-          right: widget.navBarEssentials!.padding?.right ??
-              MediaQuery.of(context).size.width * 0.04,
+          left: widget.navBarEssentials!.padding?.left ?? size.width * 0.04,
+          right: widget.navBarEssentials!.padding?.right ?? size.width * 0.04,
           top: widget.navBarEssentials!.padding?.top ??
               widget.navBarEssentials!.navBarHeight! * 0.15,
           bottom: widget.navBarEssentials!.padding?.bottom ??
@@ -136,11 +136,12 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
 
   Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected,
       double? height, int itemIndex) {
-    double itemWidth = ((MediaQuery.of(context).size.width -
-            ((widget.navBarEssentials!.padding?.left ??
-                    MediaQuery.of(context).size.width * 0.05) +
+    final size = MediaQuery.sizeOf(context);
+
+    double itemWidth = ((size.width -
+            ((widget.navBarEssentials!.padding?.left ?? size.width * 0.05) +
                 (widget.navBarEssentials!.padding?.right ??
-                    MediaQuery.of(context).size.width * 0.05))) /
+                    size.width * 0.05))) /
         widget.navBarEssentials!.items!.length);
     return widget.navBarEssentials!.navBarHeight == 0
         ? SizedBox.shrink()

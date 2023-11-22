@@ -8,6 +8,52 @@ class BottomNavStyle10 extends StatelessWidget {
     this.navBarEssentials,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
+    return Container(
+      width: double.infinity,
+      height: this.navBarEssentials!.navBarHeight,
+      padding: EdgeInsets.only(
+          top: this.navBarEssentials!.padding?.top ??
+              this.navBarEssentials!.navBarHeight! * 0.15,
+          left: this.navBarEssentials!.padding?.left ??
+              size.width * 0.07,
+          right: this.navBarEssentials!.padding?.right ??
+              size.width * 0.07,
+          bottom: this.navBarEssentials!.padding?.bottom ??
+              this.navBarEssentials!.navBarHeight! * 0.15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: this.navBarEssentials!.items!.map((item) {
+          int index = this.navBarEssentials!.items!.indexOf(item);
+          return Flexible(
+            flex: this.navBarEssentials!.selectedIndex == index ? 2 : 1,
+            child: GestureDetector(
+              onTap: () {
+                if (this.navBarEssentials!.items![index].onPressed != null) {
+                  this.navBarEssentials!.items![index].onPressed!(
+                      this.navBarEssentials!.selectedScreenBuildContext);
+                } else {
+                  this.navBarEssentials!.onItemSelected!(index);
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: _buildItem(
+                    item,
+                    this.navBarEssentials!.selectedIndex == index,
+                    this.navBarEssentials!.navBarHeight),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Widget _buildItem(
       PersistentBottomNavBarItem item, bool isSelected, double? height) {
     return this.navBarEssentials!.navBarHeight == 0
@@ -96,49 +142,5 @@ class BottomNavStyle10 extends StatelessWidget {
               ),
             ),
           );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: this.navBarEssentials!.navBarHeight,
-      padding: EdgeInsets.only(
-          top: this.navBarEssentials!.padding?.top ??
-              this.navBarEssentials!.navBarHeight! * 0.15,
-          left: this.navBarEssentials!.padding?.left ??
-              MediaQuery.of(context).size.width * 0.07,
-          right: this.navBarEssentials!.padding?.right ??
-              MediaQuery.of(context).size.width * 0.07,
-          bottom: this.navBarEssentials!.padding?.bottom ??
-              this.navBarEssentials!.navBarHeight! * 0.15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials!.items!.map((item) {
-          int index = this.navBarEssentials!.items!.indexOf(item);
-          return Flexible(
-            flex: this.navBarEssentials!.selectedIndex == index ? 2 : 1,
-            child: GestureDetector(
-              onTap: () {
-                if (this.navBarEssentials!.items![index].onPressed != null) {
-                  this.navBarEssentials!.items![index].onPressed!(
-                      this.navBarEssentials!.selectedScreenBuildContext);
-                } else {
-                  this.navBarEssentials!.onItemSelected!(index);
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: _buildItem(
-                    item,
-                    this.navBarEssentials!.selectedIndex == index,
-                    this.navBarEssentials!.navBarHeight),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
   }
 }
