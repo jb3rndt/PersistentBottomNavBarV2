@@ -22,6 +22,7 @@ class PersistentTabView extends StatefulWidget {
     this.onTabChanged,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.persistentTopWidget,
     this.resizeToAvoidBottomInset = true,
     this.selectedTabContext,
     this.popAllScreensOnTapOfSelectedTab = true,
@@ -54,6 +55,7 @@ class PersistentTabView extends StatefulWidget {
     this.onTabChanged,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.persistentTopWidget,
     this.resizeToAvoidBottomInset = true,
     this.selectedTabContext,
     this.popAllScreensOnTapOfSelectedTab = true,
@@ -100,6 +102,9 @@ class PersistentTabView extends StatefulWidget {
   ///
   /// Defaults to [FloatingActionButtonLocation.endFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+
+  /// A custom widget that remains persistently displayed above the navigation bar.
+  final Widget? persistentTopWidget;
 
   /// Specifies the navBarHeight
   ///
@@ -301,6 +306,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         margin: widget.margin,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        persistentTopWidget: widget.persistentTopWidget,
         drawer: widget.drawer,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         gestureNavigationEnabled: widget.gestureNavigationEnabled,

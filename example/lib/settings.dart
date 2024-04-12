@@ -11,6 +11,7 @@ typedef NavBarBuilder = Widget Function(
 
 class Settings {
   bool hideNavBar = false;
+  bool showAPersistentTopWidget = false;
   bool resizeToAvoidBottomInset = true;
   bool stateManagement = true;
   bool handleAndroidBackButtonPress = true;
@@ -376,6 +377,21 @@ class _SettingsViewState extends State<SettingsView> {
                   },
                 ),
                 const Text("Avoid bottom padding"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: widget.settings.showAPersistentTopWidget,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.settings.showAPersistentTopWidget = value;
+                    });
+                    widget.onChanged(widget.settings);
+                  },
+                ),
+                const Text("Show a persistent top widget"),
               ],
             ),
           ],

@@ -757,6 +757,22 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text("Screen2"), findsOneWidget);
     });
+
+    testWidgets("shows a persistent top widget if specified", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            persistentTopWidget: const Text("Persistent Top Widget"),
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, defaultScreen(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      expect(find.text("Persistent Top Widget").hitTestable(), findsOneWidget);
+    });
   });
 
   group("Regression", () {

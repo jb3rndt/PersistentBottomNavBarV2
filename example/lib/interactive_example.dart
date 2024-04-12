@@ -122,5 +122,11 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         hideNavigationBar: settings.hideNavBar,
         popAllScreensOnTapOfSelectedTab:
             settings.popAllScreensOnTapOfSelectedTab,
+        persistentTopWidget: settings.showAPersistentTopWidget
+            ? Container(
+                color: Colors.red,
+                child: const Center(child: Text("Persistent Top Widget")),
+              )
+            : null,
       );
 }

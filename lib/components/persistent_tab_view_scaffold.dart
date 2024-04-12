@@ -19,6 +19,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.navBarOverlap = const NavBarOverlap.full(),
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.persistentTopWidget,
     this.drawer,
     this.drawerEdgeDragWidth,
     this.animatedTabBuilder,
@@ -60,6 +61,8 @@ class PersistentTabViewScaffold extends StatefulWidget {
   final Widget? floatingActionButton;
 
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+
+  final Widget? persistentTopWidget;
 
   final AnimatedTabBuilder? animatedTabBuilder;
 
@@ -203,7 +206,14 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
                 right: false,
                 left: false,
                 bottom: widget.avoidBottomPadding && widget.margin.bottom != 0,
-                child: widget.tabBar,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    if (widget.persistentTopWidget != null)
+                      widget.persistentTopWidget!,
+                    widget.tabBar,
+                  ],
+                ),
               ),
             ),
           ),
