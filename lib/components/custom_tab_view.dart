@@ -47,7 +47,6 @@ class CustomTabViewState extends State<CustomTabView> {
   @override
   Widget build(BuildContext context) => Navigator(
         key: widget.navigatorConfig.navigatorKey,
-        initialRoute: widget.navigatorConfig.initialRoute,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
         observers: _navigatorObservers,
@@ -66,9 +65,12 @@ class CustomTabViewState extends State<CustomTabView> {
             pageContentBuilder(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             child,
-        settings: settings,
+        settings: RouteSettings(
+            name: widget.navigatorConfig.initialRoute ?? name,
+        ),
       );
     }
+    
     final Route? rootNavigatorRoute = Navigator.of(context, rootNavigator: true)
         .widget
         .onGenerateRoute
