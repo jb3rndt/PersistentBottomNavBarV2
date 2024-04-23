@@ -59,6 +59,10 @@ class MinimalExample extends StatelessWidget {
             icon: const Icon(Icons.home),
             title: "Home",
           ),
+          navigatorConfig: NavigatorConfig(
+            initialRoute: "/home",
+            navigatorObservers: [AnalyticsNavigatorObserver()],
+          ),
         ),
         PersistentTabConfig(
           screen: const MainScreen(),
@@ -78,9 +82,46 @@ class MinimalExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => PersistentTabView(
-        tabs: _tabs(),
-        navBarBuilder: (navBarConfig) => Style1BottomNavBar(
-          navBarConfig: navBarConfig,
-        ),
-      );
+    tabs: _tabs(),
+    navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+      navBarConfig: navBarConfig,
+    ),
+  );
+}
+
+
+
+class AnalyticsNavigatorObserver extends NavigatorObserver {
+  
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    print("didPush");
+    print("new route: ${route.settings.name}");
+    print("previous route: ${previousRoute?.settings.name}");
+    print("------------------------------------------------");
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    print("didPop");
+    print("new route: ${route.settings.name}");
+    print("previous route: ${previousRoute?.settings.name}");
+    print("------------------------------------------------");
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    print("didRemove");
+    print("new route: ${route.settings.name}");
+    print("previous route: ${previousRoute?.settings.name}");
+    print("------------------------------------------------");
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    print("didReplace");
+    print("new route: ${newRoute?.settings.name}");
+    print("previous route: ${oldRoute?.settings.name}");
+    print("------------------------------------------------");
+  }
 }

@@ -30,7 +30,7 @@ class MainScreen extends StatelessWidget {
                     pushScreen(
                       context,
                       withNavBar: true,
-                      settings: const RouteSettings(name: "/home"),
+                      settings: const RouteSettings(name: "/home/second-nav"),
                       screen: const MainScreen2(),
                       pageTransitionAnimation:
                           PageTransitionAnimation.scaleRotate,
@@ -48,7 +48,7 @@ class MainScreen extends StatelessWidget {
                   } else {
                     pushScreen(
                       context,
-                      settings: const RouteSettings(name: "/home"),
+                      settings: const RouteSettings(name: "/home/second-no-nav"),
                       screen: const MainScreen2(),
                       pageTransitionAnimation:
                           PageTransitionAnimation.scaleRotate,
