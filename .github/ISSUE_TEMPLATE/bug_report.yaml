@@ -17,6 +17,14 @@ body:
       placeholder: 5.0.0
     validations:
       required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Flutter Doctor Output
+      description: Please copy and paste the output of `flutter doctor -v`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
   - type: dropdown
     id: platforms
     attributes:

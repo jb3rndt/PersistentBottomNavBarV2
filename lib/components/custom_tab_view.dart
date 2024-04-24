@@ -5,12 +5,12 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class CustomTabView extends StatefulWidget {
   const CustomTabView({
     required this.navigatorConfig,
+    required this.home,
     super.key,
-    this.home,
   });
 
   final NavigatorConfig navigatorConfig;
-  final WidgetBuilder? home;
+  final WidgetBuilder home;
 
   @override
   CustomTabViewState createState() => CustomTabViewState();
@@ -54,10 +54,9 @@ class CustomTabViewState extends State<CustomTabView> {
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     final String? name = settings.name;
-    final WidgetBuilder? pageContentBuilder =
-        name == Navigator.defaultRouteName && widget.home != null
-            ? widget.home
-            : widget.navigatorConfig.routes[name];
+    final WidgetBuilder? pageContentBuilder = name == Navigator.defaultRouteName
+        ? widget.home
+        : widget.navigatorConfig.routes[name];
 
     if (pageContentBuilder != null) {
       return PageRouteBuilder(
