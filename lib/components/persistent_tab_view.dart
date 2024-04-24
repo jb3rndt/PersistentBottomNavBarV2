@@ -381,16 +381,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     if (!widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
       return widget.onWillPop!(_contextList[_controller.index]!);
     } else {
-      if (_controller.historyIsEmpty() &&
-          !_navigatorKeys[_controller.index].currentState!.canPop()) {
+      final navigator = _navigatorKeys[_controller.index].currentState!;
+      if (_controller.historyIsEmpty() && !navigator.canPop()) {
         if (widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
           return widget.onWillPop!(_contextList[_controller.index]!);
         }
         // CanPop should be true in this case, so we dont return true because the pop already happened
         return false;
       } else {
-        if (_navigatorKeys[_controller.index].currentState!.canPop()) {
-          _navigatorKeys[_controller.index].currentState!.pop();
+        if (navigator.canPop()) {
+          navigator.pop();
         } else {
           _controller.jumpToPreviousTab();
         }
@@ -402,26 +402,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   void popAllScreens() {
     if (widget.popAllScreensOnTapOfSelectedTab ||
         widget.popAllScreensOnTapAnyTabs) {
-      if (widget.tabs[_controller.index]
-                  .onSelectedTabPressWhenNoScreensPushed !=
-              null &&
-          !Navigator.of(_contextList[_controller.index]!).canPop()) {
-        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed!();
-      }
-
-      if (widget.popActionScreens == PopActionScreensType.once) {
-        if (Navigator.of(_contextList[_controller.index]!).canPop()) {
-          Navigator.of(_contextList[_controller.index]!).pop(context);
-          return;
-        }
+      final navigator = _navigatorKeys[_controller.index].currentState!;
+      if (!navigator.canPop()) {
+        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
+            ?.call();
       } else {
-        Navigator.popUntil(
-          _contextList[_controller.index]!,
-          ModalRoute.withName(
-            widget.tabs[_controller.index].navigatorConfig.initialRoute ??
-                Navigator.defaultRouteName,
-          ),
-        );
+        if (widget.popActionScreens == PopActionScreensType.once) {
+          navigator.maybePop(context);
+        } else {
+          navigator.popUntil((route) => route.isFirst);
+        }
       }
     }
   }
