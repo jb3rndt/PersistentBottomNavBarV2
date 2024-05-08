@@ -40,6 +40,7 @@ class PersistentTabView extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
+    this.onRedirect,
   }) : navigationShell = null;
 
   const PersistentTabView.router({
@@ -71,6 +72,7 @@ class PersistentTabView extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
+    this.onRedirect,
   })  : screenTransitionAnimation = const ScreenTransitionAnimation(),
         controller = null;
 
@@ -208,6 +210,10 @@ class PersistentTabView extends StatefulWidget {
 
   final StatefulNavigationShell? navigationShell;
 
+  /// If retrun `true`, you can't additionally swipe left/right to change the tab.
+  /// Defaults to `null`.
+  final Future<bool?> Function(int index)? onRedirect;
+
   @override
   State<PersistentTabView> createState() => _PersistentTabViewState();
 }
@@ -235,7 +241,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         PersistentTabController(
           initialIndex: widget.navigationShell?.currentIndex ?? 0,
         );
-    _controller.onIndexChanged = widget.onTabChanged;
+    _controller
+      ..onIndexChanged = widget.onTabChanged
+      ..onRedirect = widget.onRedirect;
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
 

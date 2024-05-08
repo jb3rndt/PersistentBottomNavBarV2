@@ -38,6 +38,11 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
                       Navigator.of(context).pushNamed("/interactive"),
                   child: const Text("Show Interactive Example"),
                 ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/redirect"),
+                  child: const Text("Show Redirect Example"),
+                ),
               ],
             ),
           ),
@@ -45,6 +50,7 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
         routes: {
           "/minimal": (context) => const MinimalExample(),
           "/interactive": (context) => const InteractiveExample(),
+          "/redirect": (context) => RedirectExample(),
         },
       );
 }
@@ -82,5 +88,61 @@ class MinimalExample extends StatelessWidget {
         navBarBuilder: (navBarConfig) => Style1BottomNavBar(
           navBarConfig: navBarConfig,
         ),
+      );
+}
+
+class RedirectExample extends StatelessWidget {
+  RedirectExample({super.key});
+
+  List<PersistentTabConfig> _tabs() => [
+        PersistentTabConfig(
+          screen: const MainScreen(),
+          item: ItemConfig(
+            icon: const Icon(Icons.home),
+            title: "Home",
+          ),
+        ),
+        PersistentTabConfig(
+          screen: const MainScreen(),
+          item: ItemConfig(
+            icon: const Icon(Icons.message),
+            title: "Messages",
+          ),
+        ),
+        PersistentTabConfig(
+          screen: const MainScreen(),
+          item: ItemConfig(
+            icon: const Icon(Icons.settings),
+            title: "Settings",
+          ),
+        ),
+      ];
+
+  final controller = PersistentTabController();
+
+  @override
+  Widget build(BuildContext context) => PersistentTabView(
+        controller: controller,
+        tabs: _tabs(),
+        navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+          navBarConfig: navBarConfig,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            controller.jumpToTab(2);
+          },
+          child: const Text('Jump'),
+        ),
+        onRedirect: (index) async {
+          if (index == 2) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Intercept when jumping to $index'),
+              ),
+            );
+            return true;
+          }
+          return null;
+        },
       );
 }

@@ -33,12 +33,18 @@ class PersistentTabController extends ChangeNotifier {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final List<int> _tabHistory = [];
   ValueChanged<int>? onIndexChanged;
+  Future<bool?> Function(int index)? onRedirect;
 
-  void _updateIndex(int value, [bool isUndo = false]) {
+  Future<void> _updateIndex(int value, [bool isUndo = false]) async {
     assert(value >= 0, "Nav Bar item index cannot be less than 0");
     if (_index == value) {
       return;
     }
+
+    if (await onRedirect?.call(value) ?? false) {
+      return;
+    }
+
     if (!isUndo) {
       if (_clearHistoryOnInitialIndex && value == _initialIndex) {
         _tabHistory.clear();
