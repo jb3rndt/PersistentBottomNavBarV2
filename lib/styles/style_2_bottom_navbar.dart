@@ -6,12 +6,14 @@ class Style2BottomNavBar extends StatelessWidget {
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
     this.itemPadding = const EdgeInsets.all(5),
+    this.itemDecoration,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
+  final BoxDecoration? itemDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -22,7 +24,7 @@ class Style2BottomNavBar extends StatelessWidget {
         duration: itemAnimationProperties.duration,
         curve: itemAnimationProperties.curve,
         padding: itemPadding,
-        decoration: BoxDecoration(
+        decoration: itemDecoration ?? BoxDecoration(
           color: isSelected
               ? item.activeBackgroundColor
               : item.inactiveBackgroundColor,
