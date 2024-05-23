@@ -1,19 +1,21 @@
 part of "../persistent_bottom_nav_bar_v2.dart";
 
+
 class Style2BottomNavBar extends StatelessWidget {
   const Style2BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
     this.itemPadding = const EdgeInsets.all(5),
-    this.itemDecoration,
+    this.itemDecoration = const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(50))),
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
-  final BoxDecoration? itemDecoration;
+  final BoxDecoration itemDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -24,12 +26,10 @@ class Style2BottomNavBar extends StatelessWidget {
         duration: itemAnimationProperties.duration,
         curve: itemAnimationProperties.curve,
         padding: itemPadding,
-        decoration: itemDecoration ?? BoxDecoration(
-          color: isSelected
-              ? item.activeBackgroundColor
-              : item.inactiveBackgroundColor,
-          borderRadius: const BorderRadius.all(Radius.circular(50)),
-        ),
+        decoration: itemDecoration.copyWith(
+            color: isSelected
+                ? item.activeBackgroundColor
+                : item.inactiveBackgroundColor),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -85,3 +85,4 @@ class Style2BottomNavBar extends StatelessWidget {
         ),
       );
 }
+
