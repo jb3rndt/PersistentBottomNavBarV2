@@ -49,7 +49,10 @@ class PersistentTabController extends ChangeNotifier {
           // Clear history when switching to initial tab and it is the only entry in history.
           _tabHistory.clear();
         } else if (_historyLength > 0) {
-          _tabHistory.add(_index);
+          // Removes duplicates tab from history
+          _tabHistory
+            ..remove(_index)
+            ..add(_index);
         }
 
         if (_tabHistory.length > _historyLength) {
