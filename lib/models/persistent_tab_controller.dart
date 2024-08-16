@@ -51,7 +51,7 @@ class PersistentTabController extends ChangeNotifier {
         } else if (_historyLength > 0) {
           // Removes duplicates tab from history
           _tabHistory
-            ..remove(_index)
+            ..remove(value)
             ..add(_index);
         }
 
