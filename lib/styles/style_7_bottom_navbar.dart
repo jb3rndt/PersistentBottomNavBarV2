@@ -5,11 +5,13 @@ class Style7BottomNavBar extends StatefulWidget {
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -102,11 +104,7 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
     }
     return DecoratedNavBar(
       decoration: widget.navBarDecoration,
-      filter:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].filter,
-      opacity:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].opacity,
-      height: widget.navBarConfig.navBarHeight,
+      height: widget.height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: widget.navBarConfig.items.map((item) {

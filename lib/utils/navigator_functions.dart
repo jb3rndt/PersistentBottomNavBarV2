@@ -7,16 +7,14 @@ Future<T?> pushScreen<T extends Object?>(
   bool withNavBar = false,
   PageTransitionAnimation pageTransitionAnimation =
       PageTransitionAnimation.platform,
-  PageRoute? customPageRoute,
   RouteSettings? settings,
 }) =>
     Navigator.of(context, rootNavigator: !withNavBar).push<T>(
-      customPageRoute as Route<T>? ??
-          getPageRoute(
-            pageTransitionAnimation,
-            enterPage: screen,
-            settings: settings,
-          ),
+      getPageRoute(
+        pageTransitionAnimation,
+        screen: screen,
+        settings: settings,
+      ) as Route<T>,
     );
 
 @optionalTypeArgs
@@ -50,3 +48,7 @@ Future<T?> pushReplacementWithoutNavBar<T extends Object?, TO extends Object?>(
   TO? result,
 }) =>
     Navigator.of(context, rootNavigator: true).pushReplacement<T, TO>(route);
+
+void popAllScreensOfCurrentTab(BuildContext context) {
+  Navigator.popUntil(context, (route) => route.isFirst);
+}

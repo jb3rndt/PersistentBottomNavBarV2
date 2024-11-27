@@ -4,11 +4,13 @@ class Style3BottomNavBar extends StatelessWidget {
   const Style3BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -41,9 +43,7 @@ class Style3BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: navBarConfig.items.map((item) {

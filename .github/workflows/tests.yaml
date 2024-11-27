@@ -7,7 +7,7 @@ on:
   workflow_call:
 
 env:
-  FLUTTER_VERSION: "3.19.3"
+  FLUTTER_VERSION: "3.24.4"
 
 jobs:
   tests:
@@ -33,7 +33,7 @@ jobs:
 
       # Checkout and get packages.
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Get packages
         run: flutter pub get
@@ -42,9 +42,11 @@ jobs:
       - name: Run Unit Tests
         run: flutter test --coverage
 
-      - name: Upload Coverage to Codecov
+      - name: Upload coverage to Codecov
         if: ${{ runner.os == 'Linux' }}
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   format:
     name: Format

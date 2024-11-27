@@ -4,6 +4,7 @@ class Style16BottomNavBar extends StatelessWidget {
   Style16BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   }) : assert(
           navBarConfig.items.length.isOdd,
@@ -12,6 +13,7 @@ class Style16BottomNavBar extends StatelessWidget {
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -76,9 +78,7 @@ class Style16BottomNavBar extends StatelessWidget {
     final midIndex = (navBarConfig.items.length / 2).floor();
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      filter: navBarConfig.selectedItem.filter,
-      opacity: navBarConfig.selectedItem.opacity,
-      height: navBarConfig.navBarHeight,
+      height: height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: navBarConfig.items.map((item) {

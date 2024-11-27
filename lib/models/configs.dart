@@ -12,8 +12,6 @@ class ItemConfig {
     this.inactiveForegroundColor = CupertinoColors.systemGrey,
     Color? activeColorSecondary,
     this.inactiveBackgroundColor = Colors.transparent,
-    this.opacity = 1.0,
-    this.filter,
     this.textStyle = const TextStyle(
       color: CupertinoColors.systemGrey,
       fontWeight: FontWeight.w400,
@@ -22,11 +20,7 @@ class ItemConfig {
     this.iconSize = 26.0,
   })  : inactiveIcon = inactiveIcon ?? icon,
         activeBackgroundColor =
-            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2),
-        assert(
-          opacity >= 0 && opacity <= 1.0,
-          "Opacity must be between 0 and 1.0",
-        );
+            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2);
 
   /// Icon for the bar item.
   final Widget icon;
@@ -49,18 +43,6 @@ class ItemConfig {
   /// Color for the item background if unselected (not used in every prebuilt style). Defaults to `Colors.transparent`
   final Color inactiveBackgroundColor;
 
-  /// Enables and controls the transparency effect of the entire NavBar when this tab is selected.
-  ///
-  /// `Warning: Screen will cover the entire extent of the display`
-  @Deprecated("Use the opacity of NavBarDecoration.color instead")
-  final double opacity;
-
-  /// Filter used when `opacity < 1.0`. Can be used to create 'frosted glass' effect.
-  ///
-  /// By default -> `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
-  @Deprecated("Use NavBarDecoration.filter instead")
-  final ImageFilter? filter;
-
   /// `TextStyle` of the title's text. Defaults to `TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w400, fontSize: 12.0)`
   final TextStyle textStyle;
 
@@ -76,16 +58,18 @@ class PersistentTabConfig {
   PersistentTabConfig({
     required this.screen,
     required this.item,
-    this.navigatorConfig = const NavigatorConfig(),
-    this.onSelectedTabPressWhenNoScreensPushed,
-  }) : onPressed = null;
+    NavigatorConfig? navigatorConfig,
+    this.scrollController,
+  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+        onPressed = null;
 
   PersistentTabConfig.noScreen({
     required this.item,
     required void Function(BuildContext) this.onPressed,
-    this.navigatorConfig = const NavigatorConfig(),
-    this.onSelectedTabPressWhenNoScreensPushed,
-  }) : screen = Container();
+    NavigatorConfig? navigatorConfig,
+    this.scrollController,
+  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+        screen = Container();
 
   final Widget screen;
 
@@ -93,21 +77,43 @@ class PersistentTabConfig {
 
   final NavigatorConfig navigatorConfig;
 
-  /// If you want custom behavior on a press of a NavBar item like display a modal screen, you can declare your logic here.
+  /// Use this if you want an item in your navigation bar to perform an action instead of showing a tab. Example: display a modal screen.
   ///
   /// NOTE: This will override the default tab switiching behavior for this particular item.
   final void Function(BuildContext)? onPressed;
 
-  /// Use it when you want to run some code when user presses the NavBar when on the initial screen of that respective tab. The inspiration was taken from the native iOS navigation bar behavior where when performing similar operation, you taken to the top of the list.
+  /// This is required for each tab that should scroll to the top when the tab is pressed again. Pass the scroll controller of the content of the tab.
+  final ScrollController? scrollController;
+}
+
+class SelectedTabPressConfig {
+  const SelectedTabPressConfig({
+    this.onPressed,
+    this.popAction = PopActionType.all,
+    this.scrollToTop = true,
+  });
+
+  /// Use this callback to get notified when the selected tab is pressed again. The provided parameter indicates whether there were any screens pushed on the navigator of that tab **before** the user pressed the selected tab.
   ///
-  /// NOTE: This feature is experimental at the moment and might not work as intended for some.
-  final Function()? onSelectedTabPressWhenNoScreensPushed;
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(bool)? onPressed;
+
+  /// Defines how many screens should be popped of the navigator of the selected tab, when the selected tab is pressed again.
+  /// If set to `PopActionType.all`, all screens will be popped on a single press.
+  /// If set to `PopActionType.single`, only one screen will be popped on each press.
+  /// If set to `PopActionType.none`, no screens will be popped on a press.
+  /// Defaults to `PopActionScreensType.all`.
+  final PopActionType popAction;
+
+  /// Defines whether the content of the selected tab should be scrolled to the top when the selected tab is pressed again. This requires the content to be a scrollable widget and the scroll controller has to be passed to `PersistentTabConfig.scrollController` of the tab this should apply to.
+  /// Defaults to `true`.
+  final bool scrollToTop;
 }
 
 class PersistentRouterTabConfig extends PersistentTabConfig {
   PersistentRouterTabConfig({
     required super.item,
-    super.onSelectedTabPressWhenNoScreensPushed,
+    super.scrollController,
   }) : super(screen: Container());
 }
 
@@ -119,39 +125,35 @@ class NavBarConfig {
     required this.selectedIndex,
     required this.items,
     required this.onItemSelected,
-    this.navBarHeight = kBottomNavigationBarHeight,
   });
   final int selectedIndex;
   final List<ItemConfig> items;
   final void Function(int) onItemSelected;
-  final double navBarHeight;
 
   ItemConfig get selectedItem => items[selectedIndex];
 
   NavBarConfig copyWith({
     int? selectedIndex,
     List<ItemConfig>? items,
-    bool Function(int)? onItemSelected,
-    double? navBarHeight,
+    void Function(int)? onItemSelected,
   }) =>
       NavBarConfig(
         selectedIndex: selectedIndex ?? this.selectedIndex,
         items: items ?? this.items,
         onItemSelected: onItemSelected ?? this.onItemSelected,
-        navBarHeight: navBarHeight ?? this.navBarHeight,
       );
 }
 
 class NavigatorConfig {
-  const NavigatorConfig({
+  NavigatorConfig({
     this.defaultTitle,
     this.routes = const {},
     this.onGenerateRoute,
     this.onUnknownRoute,
     this.initialRoute,
     this.navigatorObservers = const <NavigatorObserver>[],
-    this.navigatorKey,
-  });
+    GlobalKey<NavigatorState>? navigatorKey,
+  }) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>();
 
   final String? defaultTitle;
 
@@ -165,7 +167,7 @@ class NavigatorConfig {
 
   final List<NavigatorObserver> navigatorObservers;
 
-  final GlobalKey<NavigatorState>? navigatorKey;
+  final GlobalKey<NavigatorState> navigatorKey;
 
   NavigatorConfig copyWith({
     String? defaultTitle,
