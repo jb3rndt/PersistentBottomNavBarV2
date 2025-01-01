@@ -6,12 +6,14 @@ class Style8BottomNavBar extends StatelessWidget {
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
     this.itemPadding = const EdgeInsets.all(5),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
+  final double height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -62,9 +64,7 @@ class Style8BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: navBarConfig.items.map((item) {

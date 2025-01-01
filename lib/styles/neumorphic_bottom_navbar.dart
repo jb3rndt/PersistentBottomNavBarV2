@@ -6,11 +6,13 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     super.key,
     this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
+    this.height = kBottomNavigationBarHeight,
   });
 
   final NavBarConfig navBarConfig;
   final NeumorphicProperties neumorphicProperties;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   Widget _getNavItem(
     ItemConfig item,
@@ -48,12 +50,9 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     ItemConfig item,
     bool isSelected,
   ) =>
-      item.opacity == 1.0
+      neumorphicProperties.decoration?.color?.opacity == 1.0
           ? NeumorphicContainer(
-              decoration: neumorphicProperties.decoration?.copyWith(
-                color: neumorphicProperties.decoration?.color ??
-                    navBarDecoration.color,
-              ),
+              decoration: neumorphicProperties.decoration,
               bevel: neumorphicProperties.bevel,
               curveType: isSelected
                   ? CurveType.emboss
@@ -65,12 +64,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
           : Container(
               decoration: BoxDecoration(
                 borderRadius: neumorphicProperties.decoration?.borderRadius,
-                color: getBackgroundColor(
-                  context,
-                  navBarConfig.items,
-                  navBarDecoration.color,
-                  navBarConfig.selectedIndex,
-                ),
+                color: neumorphicProperties.decoration?.color,
               ),
               padding: const EdgeInsets.all(6),
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -80,9 +74,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: navBarConfig.items.map((item) {

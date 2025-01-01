@@ -3,13 +3,15 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class Style9BottomNavBar extends StatefulWidget {
   const Style9BottomNavBar({
     required this.navBarConfig,
+    super.key,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
-    super.key,
+    this.height = kBottomNavigationBarHeight,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -40,7 +42,7 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
       );
       _animationList.add(
         Tween(
-          begin: Offset(0, widget.navBarConfig.navBarHeight),
+          begin: Offset(0, widget.height),
           end: Offset.zero,
         )
             .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
@@ -109,9 +111,7 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
     }
     return DecoratedNavBar(
       decoration: widget.navBarDecoration,
-      filter: widget.navBarConfig.items[_selectedIndex].filter,
-      opacity: widget.navBarConfig.items[_selectedIndex].opacity,
-      height: widget.navBarConfig.navBarHeight,
+      height: widget.height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: widget.navBarConfig.items.map((item) {
