@@ -5,11 +5,13 @@ class Style11BottomNavBar extends StatefulWidget {
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -40,7 +42,7 @@ class _Style11BottomNavBarState extends State<Style11BottomNavBar>
       );
       _animationList.add(
         Tween(
-          begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
+          begin: Offset(0, widget.height / 1.5),
           end: Offset.zero,
         )
             .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
@@ -110,11 +112,7 @@ class _Style11BottomNavBarState extends State<Style11BottomNavBar>
     }
     return DecoratedNavBar(
       decoration: widget.navBarDecoration,
-      filter:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].filter,
-      opacity:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].opacity,
-      height: widget.navBarConfig.navBarHeight,
+      height: widget.height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: widget.navBarConfig.items.map((item) {

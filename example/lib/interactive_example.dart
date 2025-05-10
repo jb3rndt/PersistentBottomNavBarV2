@@ -101,24 +101,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         handleAndroidBackButtonPress: settings.handleAndroidBackButtonPress,
         resizeToAvoidBottomInset: settings.resizeToAvoidBottomInset,
         stateManagement: settings.stateManagement,
-        onWillPop: (context) async {
-          await showDialog(
-            context: context,
-            builder: (context) => Dialog(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text("Close"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
-          );
-          return false;
-        },
         hideNavigationBar: settings.hideNavBar,
-        popAllScreensOnTapOfSelectedTab:
-            settings.popAllScreensOnTapOfSelectedTab,
+        hideOnScrollVelocity: settings.hideOnScrollVelocity,
+        selectedTabPressConfig: settings.selectedTabPressConfig,
       );
 }

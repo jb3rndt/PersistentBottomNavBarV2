@@ -15,7 +15,10 @@ class Settings {
   bool stateManagement = true;
   bool handleAndroidBackButtonPress = true;
   bool popAllScreensOnTapOfSelectedTab = true;
+  int hideOnScrollVelocity = 200;
   bool avoidBottomPadding = true;
+  SelectedTabPressConfig selectedTabPressConfig =
+      const SelectedTabPressConfig();
   Color navBarColor = Colors.white;
   NavBarBuilder get navBarBuilder => navBarStyles[navBarStyle]!;
   String navBarStyle = "Style 1";

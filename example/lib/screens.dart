@@ -112,6 +112,20 @@ class MainScreen extends StatelessWidget {
                 child: const Text("Push Dynamic/Modal Screen"),
               ),
             ),
+            const SizedBox(height: 16),
+            ...List.generate(
+              20,
+              (i) => Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(top: 8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Text("Item $i"),
+              ),
+            ),
           ],
         ),
       );
