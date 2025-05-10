@@ -217,6 +217,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   late final List<String> tabIDs = widget.tabs.map((e) => e.id).toList();
   late bool canPop = widget.handleAndroidBackButtonPress;
 
+  PersistentTabConfig tab(String id) => widget.tabs.firstWhere(
+        (tab) => tab.id == id,
+      );
+
   @override
   void initState() {
     super.initState();
@@ -268,11 +272,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       if (index == -1) {
         index = _controller.initialIndex;
       }
-      _controller.jumpToTab(index);
-
       tabIDs
         ..clear()
         ..addAll(newIDs);
+
+      _controller.jumpToTab(index);
     }
     if (widget.navigationShell != null &&
         widget.navigationShell != oldWidget.navigationShell &&
@@ -289,11 +293,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     super.dispose();
   }
 
-  Widget _buildScreen(int index) {
-    final screen = widget.tabs[index].screen;
+  Widget _buildScreen(String id) {
+    final screen = tab(id).screen;
     return CustomTabView(
-      key: _tabKeys[tabIDs[index]],
-      navigatorConfig: widget.tabs[index].navigatorConfig,
+      key: _tabKeys[id],
+      navigatorConfig: tab(id).navigatorConfig,
       home: (context) => screen,
     );
   }
@@ -302,7 +306,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         controller: _controller,
         hideNavigationBar: widget.hideNavigationBar,
         hideOnScrollVelocity: widget.hideOnScrollVelocity,
-        tabCount: widget.tabs.length,
+        tabIDsOrder: tabIDs,
         stateManagement: widget.stateManagement,
         backgroundColor: widget.backgroundColor,
         navBarOverlap: widget.navBarOverlap,
@@ -315,7 +319,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         drawer: widget.drawer,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         gestureNavigationEnabled: widget.gestureNavigationEnabled,
-        tabBuilder: (context, index) => _buildScreen(index),
+        tabBuilder: (context, id) => _buildScreen(id),
         animatedTabBuilder: widget.animatedTabBuilder,
         navigationShell: widget.navigationShell,
         tabBar: widget.navBarBuilder(

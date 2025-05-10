@@ -15,9 +15,25 @@ extension MapUtils<K, V> on Map<K, V> {
   /// Given a list of keys, remove all keys that are not in the list and
   /// add all keys that are in the list but not in the map using the provided
   /// generator function.
-  void alignKeys(Iterable<K> keys, V Function(K) generator) {
+  void alignKeys(
+    Iterable<K> keys,
+    V Function(K) generator, {
+    void Function(K, V)? onRemove,
+  }) {
     final Set<K> keySet = keys.toSet();
-    removeWhere((key, _) => !keySet.contains(key));
+
+    // Remove keys that are not in the list
+    final List<MapEntry<K, V>> copiedEntries = entries.toList();
+    for (final entry in copiedEntries) {
+      if (!keySet.contains(entry.key)) {
+        if (onRemove != null) {
+          onRemove(entry.key, entry.value);
+        }
+        remove(entry.key);
+      }
+    }
+
+    // Add missing keys
     for (final K key in keySet) {
       if (!containsKey(key)) {
         this[key] = generator(key);

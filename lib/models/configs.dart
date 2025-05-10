@@ -90,6 +90,25 @@ class PersistentTabConfig {
 
   /// This is required for each tab that should scroll to the top when the tab is pressed again. Pass the scroll controller of the content of the tab.
   final ScrollController? scrollController;
+
+  @override
+  int get hashCode => Object.hash(
+        item,
+        navigatorConfig,
+        scrollController,
+        screen,
+        super.hashCode,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      other is PersistentTabConfig &&
+      id == other.id &&
+      screen == other.screen &&
+      item == other.item &&
+      navigatorConfig == other.navigatorConfig &&
+      onPressed == other.onPressed &&
+      scrollController == other.scrollController;
 }
 
 class SelectedTabPressConfig {

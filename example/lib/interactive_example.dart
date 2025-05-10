@@ -16,15 +16,16 @@ class _InteractiveExampleState extends State<InteractiveExample> {
   bool _hideTab = false;
 
   List<PersistentTabConfig> _tabs() => [
-        PersistentTabConfig(
-          screen: const MainScreen(),
-          item: ItemConfig(
-            icon: const Icon(Icons.home),
-            title: "Home",
-            activeForegroundColor: Colors.blue,
-            inactiveForegroundColor: Colors.grey,
+        if (!_hideTab)
+          PersistentTabConfig(
+            screen: const MainScreen(),
+            item: ItemConfig(
+              icon: const Icon(Icons.home),
+              title: "Home",
+              activeForegroundColor: Colors.blue,
+              inactiveForegroundColor: Colors.grey,
+            ),
           ),
-        ),
         PersistentTabConfig(
           screen: const MainScreen(),
           item: ItemConfig(
@@ -56,16 +57,15 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             inactiveForegroundColor: Colors.grey,
           ),
         ),
-        if (!_hideTab)
-          PersistentTabConfig(
-            screen: const MainScreen(),
-            item: ItemConfig(
-              icon: const Icon(Icons.settings),
-              title: "Settings",
-              activeForegroundColor: Colors.indigo,
-              inactiveForegroundColor: Colors.grey,
-            ),
+        PersistentTabConfig(
+          screen: const MainScreen(),
+          item: ItemConfig(
+            icon: const Icon(Icons.settings),
+            title: "Settings",
+            activeForegroundColor: Colors.indigo,
+            inactiveForegroundColor: Colors.grey,
           ),
+        ),
       ];
 
   @override
