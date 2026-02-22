@@ -19,7 +19,7 @@ class DecoratedNavBar extends StatelessWidget {
             Positioned.fill(
               child: ClipRect(
                 child: BackdropFilter(
-                  filter: decoration.filter!,
+                  filter: decoration.filter,
                   child: Container(
                     color: Colors.transparent,
                   ),
