@@ -19,7 +19,9 @@ class DecoratedNavBar extends StatelessWidget {
             Positioned.fill(
               child: ClipRect(
                 child: BackdropFilter(
-                  filter: decoration.filter,
+                  // for previous flutter versions, BackdropFilter.filter is not nullable, so we need to ignore the null check here (which is included in the above if statement anyway)
+                  // ignore: unnecessary_null_checks
+                  filter: decoration.filter!,
                   child: Container(
                     color: Colors.transparent,
                   ),
