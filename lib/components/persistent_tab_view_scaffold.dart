@@ -267,8 +267,13 @@ class _HideOnScrollState extends State<HideOnScroll> {
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollInfo) {
-        final diff = scrollInfo.metrics.pixels - scrollOffset;
-        scrollOffset = scrollInfo.metrics.pixels;
+        if (scrollInfo.metrics.pixels < 0) {
+          scrollOffset = 0;
+          return false;
+        }
+        final currentOffset = scrollInfo.metrics.pixels;
+        final diff = currentOffset - scrollOffset;
+        scrollOffset = currentOffset;
         widget.onScroll(diff / widget.hideOnScrollVelocity);
         return true;
       },

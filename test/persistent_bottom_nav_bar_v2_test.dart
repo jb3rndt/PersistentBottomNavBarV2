@@ -2358,5 +2358,56 @@ void main() {
 
       expectTab(0, level: 1);
     });
+
+    testWidgets(
+        "#225 does not hide nav bar when coming back from overscroll (scrolling back up after scrolling down enough to hide the nav bar) ()",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: List.generate(
+              3,
+              (id) => tabConfig(
+                id,
+                scrollableScreen(
+                  id,
+                  physics: const BouncingScrollPhysics(),
+                ),
+              ),
+            ),
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+            ),
+            hideOnScrollVelocity: 200,
+          ),
+        ),
+      );
+
+      final gesture = await tester.startGesture(const Offset(0, 200));
+
+      await gesture.moveBy(const Offset(0, 100));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+        findsOneWidget,
+      );
+      expect(
+        tester.getRect(find.byType(DecoratedNavBar).first).bottom,
+        equals(600),
+      );
+
+      await gesture.moveBy(const Offset(0, -100));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+        findsOneWidget,
+      );
+      expect(
+        tester.getRect(find.byType(DecoratedNavBar).first).bottom,
+        equals(600),
+      );
+    });
   });
 }

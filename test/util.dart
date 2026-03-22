@@ -49,8 +49,10 @@ Widget scrollableScreen(
   int tab, {
   int level = 0,
   ScrollController? controller,
+  ScrollPhysics? physics,
 }) =>
     ListView(
+      physics: physics,
       controller: controller,
       children: [
         Text("Tab $tab"),
