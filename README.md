@@ -1,9 +1,9 @@
 # Persistent Bottom Navigation Bar Version 2
 
-[![Build](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions)
-[![Coverage](https://codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/)
+[![Build](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions)
+[![Coverage](https://codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/branch/main/graph/badge.svg)](https://app.codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/)
 [![Pub package version](https://img.shields.io/pub/v/persistent_bottom_nav_bar_v2)](https://pub.dev/packages/persistent_bottom_nav_bar_v2)
-[![License](https://img.shields.io/github/license/jb3rndt/PersistentBottomNavBarV2)](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/jb3rndt/PersistentBottomNavBarV2)](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/main/LICENSE)
 [![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/jb3rndt/PersistentBottomNavBarV2)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/issues/)
 [![GitHub Repo stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?style=flat)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/stargazers/)
 
@@ -11,46 +11,32 @@ A highly customizable bottom navigation bar for Flutter. It is shipped with 17 p
 
 NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar).
 
-## 🎉 Version 6.0.0 Released! 🎉
-
-**Version 6.0.0** includes new features like Animated Icons, further improvements, and bug fixes. 🚀
-
-### New Features
-
-- **Scroll to Top**: Added the ability to scroll to the top of the current tab with a double tap on the tab icon.
-- **Animated Icons**: Introduced support for animated icons in the navigation bar.
-- **Change Number of Tabs at Runtime**: Properly support dynamically hiding and showing tabs at runtime.
-
-### Breaking Changes
-
-See the [Changelog](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/CHANGELOG.md) for breaking changes
-
 > [!NOTE]
-> If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md).
+> If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/main/MigrationGuide.md).
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/jb3rndt/PersistentBottomNavBarV2/master/gifs/preview.gif" alt="Preview" style="height:400px;"/>
+<img src="https://raw.githubusercontent.com/jb3rndt/PersistentBottomNavBarV2/main/gifs/preview.gif" alt="Preview" style="height:400px;"/>
 </p>
 
 ## Features
 
+- Per-Tab State (incl. nested navigation stack) is not discarded when switching between tabs (can be disabled)
 - New pages can be pushed with or without showing the navigation bar.
 - 17 prebuilt navigation bar styles ready to use.
 - Each style is fully customizable ([see styling section](#styling))
 - Fully customizable navigation bars
-- Navigation Stack is not discarded when switching to another tab (can be turned off)
 - Option to hide the navigation bar once the user scrolls down
 - ([Animated icons](#animatedicons))
 - Handles hardware/software Android back button.
 - Supports [go_router](https://pub.dev/packages/go_router) to make use of flutters Router API
 - Supports transparency and blur effects
+- Scroll to the top of the current tab with a double tap on the tab icon
+- Animated icons in the navigation bar
+- Dynamically hide and show tabs at runtime
 
 <details>
   <summary><span style="font-size: 25px">Table of Contents</span></summary>
 
-- [🎉 Version 6.0.0 Released! 🎉](#-version-600-released-)
-  - [New Features](#new-features)
-  - [Breaking Changes](#breaking-changes)
 - [Features](#features)
 - [Styles](#styles)
 - [Getting Started](#getting-started)
@@ -415,7 +401,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
 
 ### Router API
 
-To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/example/lib/go_router_example.dart) for a full code example or the code snippet below:
+To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/main/example/lib/go_router_example.dart) for a full code example or the code snippet below:
 
 - use `PersistentTabView.router` instead of `PersistentTabView`
 - pass the `navigationShell` to the `PersistentTabView.router` (this will contain each tab view)
@@ -500,7 +486,7 @@ StatefulShellRoute.indexedStack(
 
 ## Useful Tips
 
-- Try the [interactive example project](https://github.com/jb3rndt/PersistentBottomNavBarV2/tree/master/example) in the official git repo to get a better feeling for the package
+- Try the [interactive example project](https://github.com/jb3rndt/PersistentBottomNavBarV2/tree/main/example) in the official git repo to get a better feeling for the package
 
 - Pop to any screen in the navigation stack for a given tab:
 

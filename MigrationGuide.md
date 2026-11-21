@@ -1,6 +1,6 @@
 # V4 -> V5 Migration Guide
 
-All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/master/MigrationGuide.md) are very welcome :)
+All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/main/MigrationGuide.md) are very welcome :)
 
 > [!WARNING]
 > Don't wrap the `PersistentTabView` in a Scaffold. The `PersistentTabView` is the container for all your tabs. ([See here](#drawers) to transfer a Drawer if you used one)
