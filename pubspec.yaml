@@ -3,16 +3,18 @@ description: A highly customizable bottom navigation bar for Flutter. Includes 1
 
 homepage: https://github.com/jb3rndt/PersistentBottomNavBarV2
 repository: https://github.com/jb3rndt/PersistentBottomNavBarV2
-version: 6.5.0
+version: 7.0.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.27.0"
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
 
 dependencies:
+  cupertino_ui: ^1.1.7
   flutter:
     sdk: flutter
   go_router: ">=14.0.1 <19.0.0"
+  material_ui: ^1.11.1
 
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,7 @@ on:
   workflow_call:
 
 env:
-  FLUTTER_VERSION: "3.41.2"
+  FLUTTER_VERSION: "3.50.1"
 
 jobs:
   tests:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        flutter-version: ["3.35.7", "3.38.5", "3.41.2"]
+        flutter-version: ["3.47.0", "3.50.1"]
 
     steps:
       - name: Set up Flutter

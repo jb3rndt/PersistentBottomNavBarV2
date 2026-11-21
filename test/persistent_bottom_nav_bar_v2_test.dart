@@ -2,8 +2,8 @@
 
 import "dart:ui";
 
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:material_ui/material_ui.dart";
 import "package:persistent_bottom_nav_bar_v2/components/animated_icon_wrapper.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
