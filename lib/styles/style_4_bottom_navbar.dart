@@ -17,35 +17,36 @@ class Style4BottomNavBar extends StatelessWidget {
   final ItemAnimation itemAnimationProperties;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      IconTheme(
+        data: IconThemeData(
+          size: item.iconSize,
+          color: isSelected
+              ? item.activeForegroundColor
+              : item.inactiveForegroundColor,
+        ),
+        child: isSelected ? item.icon : item.inactiveIcon,
+      ),
+      if (item.title != null)
+        FittedBox(
+          child: Text(
+            item.title!,
+            style: item.textStyle.apply(
               color: isSelected
                   ? item.activeForegroundColor
                   : item.inactiveForegroundColor,
             ),
-            child: isSelected ? item.icon : item.inactiveIcon,
           ),
-          if (item.title != null)
-            FittedBox(
-              child: Text(
-                item.title!,
-                style: item.textStyle.apply(
-                  color: isSelected
-                      ? item.activeForegroundColor
-                      : item.inactiveForegroundColor,
-                ),
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
-    final double itemWidth = (MediaQuery.of(context).size.width -
+    final double itemWidth =
+        (MediaQuery.of(context).size.width -
             navBarDecoration.padding.horizontal) /
         navBarConfig.items.length;
     return DecoratedNavBar(

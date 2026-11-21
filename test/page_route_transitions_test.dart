@@ -3,15 +3,15 @@ import "package:material_ui/material_ui.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 Widget mainScreen(void Function() onPressed) => MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: ElevatedButton(
-            onPressed: onPressed,
-            child: const Text("Push Route"),
-          ),
-        ),
+  home: Scaffold(
+    body: Center(
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: const Text("Push Route"),
       ),
-    );
+    ),
+  ),
+);
 
 void main() {
   group("PageTransitionAnimation", () {
@@ -21,11 +21,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.platform,
-              screen: const Column(
-                children: [
-                  Text("Material"),
-                ],
-              ),
+              screen: const Column(children: [Text("Material")]),
             ),
           );
         }),
@@ -43,11 +39,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.cupertino,
-              screen: const Column(
-                children: [
-                  Text("Cupertino"),
-                ],
-              ),
+              screen: const Column(children: [Text("Cupertino")]),
             ),
           );
         }),
@@ -65,11 +57,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.slideUp,
-              screen: const Column(
-                children: [
-                  Text("SlideUp"),
-                ],
-              ),
+              screen: const Column(children: [Text("SlideUp")]),
             ),
           );
         }),
@@ -91,11 +79,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.slideRight,
-              screen: const Column(
-                children: [
-                  Text("SlideRight"),
-                ],
-              ),
+              screen: const Column(children: [Text("SlideRight")]),
             ),
           );
         }),
@@ -117,11 +101,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.scale,
-              screen: const Column(
-                children: [
-                  Text("Scale"),
-                ],
-              ),
+              screen: const Column(children: [Text("Scale")]),
             ),
           );
         }),
@@ -145,11 +125,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.rotate,
-              screen: const Column(
-                children: [
-                  Text("Rotate"),
-                ],
-              ),
+              screen: const Column(children: [Text("Rotate")]),
             ),
           );
         }),
@@ -167,11 +143,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.sizeUp,
-              screen: const Column(
-                children: [
-                  Text("SizeUp"),
-                ],
-              ),
+              screen: const Column(children: [Text("SizeUp")]),
             ),
           );
         }),
@@ -195,11 +167,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.fade,
-              screen: const Column(
-                children: [
-                  Text("Fade"),
-                ],
-              ),
+              screen: const Column(children: [Text("Fade")]),
             ),
           );
         }),
@@ -217,11 +185,7 @@ void main() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
             getPageRoute(
               PageTransitionAnimation.scaleRotate,
-              screen: const Column(
-                children: [
-                  Text("ScaleRotate"),
-                ],
-              ),
+              screen: const Column(children: [Text("ScaleRotate")]),
             ),
           );
         }),

@@ -7,8 +7,8 @@ class ScreenTransitionAnimation {
   });
 
   const ScreenTransitionAnimation.none()
-      : duration = Duration.zero,
-        curve = Curves.linear;
+    : duration = Duration.zero,
+      curve = Curves.linear;
 
   final Duration duration;
   final Curve curve;

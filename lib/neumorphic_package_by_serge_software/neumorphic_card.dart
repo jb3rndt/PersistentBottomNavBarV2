@@ -2,12 +2,7 @@
 /// https://medium.com/flutter-community/neumorphic-designs-in-flutter-eab9a4de2059
 part of "../persistent_bottom_nav_bar_v2.dart";
 
-enum CurveType {
-  concave,
-  convex,
-  emboss,
-  flat,
-}
+enum CurveType { concave, convex, emboss, flat }
 
 class NeumorphicContainer extends StatelessWidget {
   NeumorphicContainer({
@@ -24,11 +19,11 @@ class NeumorphicContainer extends StatelessWidget {
     this.padding,
     this.transform,
     super.key,
-  })  : decoration = decoration ?? NeumorphicDecoration(color: color),
-        constraints = (width != null || height != null)
-            ? constraints?.tighten(width: width, height: height) ??
-                BoxConstraints.tightFor(width: width, height: height)
-            : constraints;
+  }) : decoration = decoration ?? NeumorphicDecoration(color: color),
+       constraints = (width != null || height != null)
+           ? constraints?.tighten(width: width, height: height) ??
+                 BoxConstraints.tightFor(width: width, height: height)
+           : constraints;
 
   final Widget? child;
 
@@ -142,13 +137,10 @@ class NeumorphicContainer extends StatelessWidget {
   }
 
   Gradient _getFlatGradients(Color baseColor, double depth) => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          baseColor,
-          baseColor,
-        ],
-      );
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [baseColor, baseColor],
+  );
 
   Gradient _getConcaveGradients(Color baseColor, double depth) =>
       LinearGradient(
@@ -161,13 +153,13 @@ class NeumorphicContainer extends StatelessWidget {
       );
 
   Gradient _getConvexGradients(Color baseColor, double depth) => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          _getAdjustColor(baseColor, depth),
-          _getAdjustColor(baseColor, 0 - depth),
-        ],
-      );
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      _getAdjustColor(baseColor, depth),
+      _getAdjustColor(baseColor, 0 - depth),
+    ],
+  );
 }
 
 class NeumorphicDecoration {
@@ -188,11 +180,10 @@ class NeumorphicDecoration {
     BorderRadiusGeometry? borderRadius,
     BoxShape? shape,
     BoxBorder? border,
-  }) =>
-      NeumorphicDecoration(
-        color: color ?? this.color,
-        borderRadius: borderRadius ?? this.borderRadius,
-        shape: shape ?? this.shape,
-        border: border ?? this.border,
-      );
+  }) => NeumorphicDecoration(
+    color: color ?? this.color,
+    borderRadius: borderRadius ?? this.borderRadius,
+    shape: shape ?? this.shape,
+    border: border ?? this.border,
+  );
 }

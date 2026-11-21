@@ -19,66 +19,63 @@ class Style8BottomNavBar extends StatelessWidget {
   final ItemAnimation itemAnimationProperties;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => AnimatedContainer(
-        width: isSelected ? 120 : 50,
-        duration: itemAnimationProperties.duration,
-        curve: itemAnimationProperties.curve,
-        padding: itemPadding,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? item.activeBackgroundColor
-              : item.inactiveBackgroundColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+    width: isSelected ? 120 : 50,
+    duration: itemAnimationProperties.duration,
+    curve: itemAnimationProperties.curve,
+    padding: itemPadding,
+    decoration: BoxDecoration(
+      color: isSelected
+          ? item.activeBackgroundColor
+          : item.inactiveBackgroundColor,
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        IconTheme(
+          data: IconThemeData(
+            size: item.iconSize,
+            color: isSelected
+                ? item.activeForegroundColor
+                : item.inactiveForegroundColor,
+          ),
+          child: isSelected ? item.icon : item.inactiveIcon,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
-            ),
-            if (item.title != null && isSelected)
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: FittedBox(
-                    child: Text(
-                      item.title!,
-                      style: item.textStyle.apply(
-                        color: isSelected
-                            ? item.activeForegroundColor
-                            : item.inactiveForegroundColor,
-                      ),
-                    ),
+        if (item.title != null && isSelected)
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: FittedBox(
+                child: Text(
+                  item.title!,
+                  style: item.textStyle.apply(
+                    color: isSelected
+                        ? item.activeForegroundColor
+                        : item.inactiveForegroundColor,
                   ),
                 ),
               ),
-          ],
-        ),
-      );
+            ),
+          ),
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
-        decoration: navBarDecoration,
-        height: height,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: navBarConfig.items.map((item) {
-            final int index = navBarConfig.items.indexOf(item);
-            return GestureDetector(
-              onTap: () {
-                navBarConfig.onItemSelected(index);
-              },
-              child: _buildItem(
-                item,
-                navBarConfig.selectedIndex == index,
-              ),
-            );
-          }).toList(),
-        ),
-      );
+    decoration: navBarDecoration,
+    height: height,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: navBarConfig.items.map((item) {
+        final int index = navBarConfig.items.indexOf(item);
+        return GestureDetector(
+          onTap: () {
+            navBarConfig.onItemSelected(index);
+          },
+          child: _buildItem(item, navBarConfig.selectedIndex == index),
+        );
+      }).toList(),
+    ),
+  );
 }

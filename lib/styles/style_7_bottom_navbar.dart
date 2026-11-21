@@ -54,37 +54,37 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
   }
 
   Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeForegroundColor
-                  : item.inactiveForegroundColor,
-            ),
-            child: isSelected ? item.icon : item.inactiveIcon,
-          ),
-          if (item.title != null)
-            AnimatedBuilder(
-              animation: _animationList[itemIndex],
-              builder: (context, child) => Transform.scale(
-                scale: _animationList[itemIndex].value,
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                      color: isSelected
-                          ? item.activeForegroundColor
-                          : item.inactiveForegroundColor,
-                    ),
-                  ),
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      IconTheme(
+        data: IconThemeData(
+          size: item.iconSize,
+          color: isSelected
+              ? item.activeForegroundColor
+              : item.inactiveForegroundColor,
+        ),
+        child: isSelected ? item.icon : item.inactiveIcon,
+      ),
+      if (item.title != null)
+        AnimatedBuilder(
+          animation: _animationList[itemIndex],
+          builder: (context, child) => Transform.scale(
+            scale: _animationList[itemIndex].value,
+            child: FittedBox(
+              child: Text(
+                item.title!,
+                style: item.textStyle.apply(
+                  color: isSelected
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             ),
-        ],
-      );
+          ),
+        ),
+    ],
+  );
 
   @override
   void dispose() {

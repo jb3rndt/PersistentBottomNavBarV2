@@ -34,8 +34,10 @@ class AnimatedIconWrapperState extends State<AnimatedIconWrapper>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    _animation = Tween<double>(begin: 0.toDouble(), end: 1.toDouble())
-        .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
+    _animation = Tween<double>(
+      begin: 0.toDouble(),
+      end: 1.toDouble(),
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
   }
 
   void forward() {
@@ -56,11 +58,11 @@ class AnimatedIconWrapperState extends State<AnimatedIconWrapper>
 
   @override
   Widget build(BuildContext context) => AnimatedIcon(
-        icon: widget.icon,
-        color: widget.color,
-        size: widget.size,
-        semanticLabel: widget.semanticLabel,
-        textDirection: widget.textDirection,
-        progress: _animation,
-      );
+    icon: widget.icon,
+    color: widget.color,
+    size: widget.size,
+    semanticLabel: widget.semanticLabel,
+    textDirection: widget.textDirection,
+    progress: _animation,
+  );
 }

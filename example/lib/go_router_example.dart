@@ -11,9 +11,7 @@ class GoRouterExample extends StatelessWidget {
 
   final subRoutes = GoRoute(
     path: "detail",
-    builder: (context, state) => const MainScreen2(
-      useRouter: true,
-    ),
+    builder: (context, state) => const MainScreen2(useRouter: true),
     routes: [
       GoRoute(
         path: "super-detail",
@@ -53,31 +51,30 @@ class GoRouterExample extends StatelessWidget {
           StatefulShellRoute.indexedStack(
             builder: (context, state, navigationShell) =>
                 PersistentTabView.router(
-              tabs: [
-                PersistentRouterTabConfig(
-                  item: ItemConfig(
-                    icon: const Icon(Icons.home),
-                    title: "Home",
-                  ),
+                  tabs: [
+                    PersistentRouterTabConfig(
+                      item: ItemConfig(
+                        icon: const Icon(Icons.home),
+                        title: "Home",
+                      ),
+                    ),
+                    PersistentRouterTabConfig(
+                      item: ItemConfig(
+                        icon: const Icon(Icons.message),
+                        title: "Messages",
+                      ),
+                    ),
+                    PersistentRouterTabConfig(
+                      item: ItemConfig(
+                        icon: const Icon(Icons.settings),
+                        title: "Settings",
+                      ),
+                    ),
+                  ],
+                  navBarBuilder: (navBarConfig) =>
+                      Style1BottomNavBar(navBarConfig: navBarConfig),
+                  navigationShell: navigationShell,
                 ),
-                PersistentRouterTabConfig(
-                  item: ItemConfig(
-                    icon: const Icon(Icons.message),
-                    title: "Messages",
-                  ),
-                ),
-                PersistentRouterTabConfig(
-                  item: ItemConfig(
-                    icon: const Icon(Icons.settings),
-                    title: "Settings",
-                  ),
-                ),
-              ],
-              navBarBuilder: (navBarConfig) => Style1BottomNavBar(
-                navBarConfig: navBarConfig,
-              ),
-              navigationShell: navigationShell,
-            ),
             branches: [
               // The route branch for the 1st Tab
               StatefulShellBranch(
@@ -85,17 +82,15 @@ class GoRouterExample extends StatelessWidget {
                 routes: <RouteBase>[
                   GoRoute(
                     path: "home",
-                    builder: (context, state) => const MainScreen(
-                      useRouter: true,
-                    ),
+                    builder: (context, state) =>
+                        const MainScreen(useRouter: true),
                     routes: [
                       /// When you use the navigator Key that of the root navigator, this and all the sub routes will be pushed to the root navigator (-> without the navbar)
                       GoRoute(
                         parentNavigatorKey: _parentKey,
                         path: "detail",
-                        builder: (context, state) => const MainScreen2(
-                          useRouter: true,
-                        ),
+                        builder: (context, state) =>
+                            const MainScreen2(useRouter: true),
                         routes: [
                           GoRoute(
                             path: "super-detail",
@@ -113,9 +108,8 @@ class GoRouterExample extends StatelessWidget {
                 routes: <RouteBase>[
                   GoRoute(
                     path: "messages",
-                    builder: (context, state) => const MainScreen(
-                      useRouter: true,
-                    ),
+                    builder: (context, state) =>
+                        const MainScreen(useRouter: true),
                     routes: [subRoutes],
                   ),
                 ],
@@ -126,9 +120,8 @@ class GoRouterExample extends StatelessWidget {
                 routes: <RouteBase>[
                   GoRoute(
                     path: "settings",
-                    builder: (context, state) => const MainScreen(
-                      useRouter: true,
-                    ),
+                    builder: (context, state) =>
+                        const MainScreen(useRouter: true),
                     routes: [subRoutes],
                   ),
                 ],
@@ -142,7 +135,7 @@ class GoRouterExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        title: "Persistent Bottom Navigation Bar Demo",
-        routerConfig: goRouter,
-      );
+    title: "Persistent Bottom Navigation Bar Demo",
+    routerConfig: goRouter,
+  );
 }

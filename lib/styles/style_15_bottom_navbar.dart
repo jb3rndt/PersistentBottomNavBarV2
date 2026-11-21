@@ -8,9 +8,9 @@ class Style15BottomNavBar extends StatelessWidget {
     this.middleItemSize = 50,
     super.key,
   }) : assert(
-          navBarConfig.items.length.isOdd,
-          "The number of items must be odd for this style",
-        );
+         navBarConfig.items.length.isOdd,
+         "The number of items must be odd for this style",
+       );
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
@@ -18,55 +18,55 @@ class Style15BottomNavBar extends StatelessWidget {
   final double middleItemSize;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      IconTheme(
+        data: IconThemeData(
+          size: item.iconSize,
+          color: isSelected
+              ? item.activeForegroundColor
+              : item.inactiveForegroundColor,
+        ),
+        child: isSelected ? item.icon : item.inactiveIcon,
+      ),
+      if (item.title != null)
+        FittedBox(
+          child: Text(
+            item.title!,
+            style: item.textStyle.apply(
               color: isSelected
                   ? item.activeForegroundColor
                   : item.inactiveForegroundColor,
             ),
-            child: isSelected ? item.icon : item.inactiveIcon,
           ),
-          if (item.title != null)
-            FittedBox(
-              child: Text(
-                item.title!,
-                style: item.textStyle.apply(
-                  color: isSelected
-                      ? item.activeForegroundColor
-                      : item.inactiveForegroundColor,
-                ),
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 
   Widget _buildMiddleItem(ItemConfig item, bool isSelected) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 5, right: 5),
-            height: middleItemSize,
-            width: middleItemSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: item.activeForegroundColor,
-            ),
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
-            ),
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        margin: const EdgeInsets.only(left: 5, right: 5),
+        height: middleItemSize,
+        width: middleItemSize,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: item.activeForegroundColor,
+        ),
+        child: IconTheme(
+          data: IconThemeData(
+            size: item.iconSize,
+            color: isSelected
+                ? item.activeForegroundColor
+                : item.inactiveForegroundColor,
           ),
-        ],
-      );
+          child: isSelected ? item.icon : item.inactiveIcon,
+        ),
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +84,8 @@ class Style15BottomNavBar extends StatelessWidget {
                 navBarConfig.onItemSelected(index);
               },
               child: index == midIndex
-                  ? _buildMiddleItem(
-                      item,
-                      navBarConfig.selectedIndex == index,
-                    )
-                  : _buildItem(
-                      item,
-                      navBarConfig.selectedIndex == index,
-                    ),
+                  ? _buildMiddleItem(item, navBarConfig.selectedIndex == index)
+                  : _buildItem(item, navBarConfig.selectedIndex == index),
             ),
           );
         }).toList(),

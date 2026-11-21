@@ -77,58 +77,58 @@ void main() {
       expect(count, 1);
     });
 
-    group(
-      "allows changing the number of tabs",
-      () {
-        group("when adding tabs", () {
-          testWidgets("after the current tab is accessible", (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+    group("allows changing the number of tabs", () {
+      group("when adding tabs", () {
+        testWidgets("after the current tab is accessible", (tester) async {
+          final tabs = [
+            1,
+            2,
+            3,
+          ].map((id) => tabConfig(id, defaultScreen(id))).toList();
 
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-            );
+            ),
+          );
 
-            expectTab(1);
+          expectTab(1);
 
-            tabs.add(tabConfig(4, defaultScreen(4)));
+          tabs.add(tabConfig(4, defaultScreen(4)));
 
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: tabs.toList(),
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-            );
+            ),
+          );
 
-            expectTab(1);
+          expectTab(1);
 
-            await tapItem(tester, 4);
-            expectTab(4);
-          });
+          await tapItem(tester, 4);
+          expectTab(4);
+        });
 
-          testWidgets(
-              "in front of the current tab is accessible and has the same index",
-              (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+        testWidgets(
+          "in front of the current tab is accessible and has the same index",
+          (tester) async {
+            final tabs = [
+              1,
+              2,
+              3,
+            ].map((id) => tabConfig(id, defaultScreen(id))).toList();
 
             await tester.pumpWidget(
               wrapTabView(
                 (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
+                  tabs: tabs.toList(), // create a copy to avoid modifying this reference
                   navBarBuilder: (config) =>
                       Style1BottomNavBar(navBarConfig: config),
                 ),
@@ -150,57 +150,60 @@ void main() {
             );
 
             expectTab(0);
-          });
+          },
+        );
+      });
+
+      group("when removing tabs", () {
+        testWidgets("they are not accessible", (tester) async {
+          final tabs = [
+            1,
+            2,
+            3,
+          ].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectTab(1);
+
+          tabs.removeAt(2);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectTab(1);
+
+          expect(find.text("Item3"), findsNothing);
         });
 
-        group("when removing tabs", () {
-          testWidgets("they are not accessible", (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+        testWidgets(
+          "stays on the same index (-> tab changes) when removing a tab in front of the current one",
+          (tester) async {
+            final tabs = [
+              1,
+              2,
+              3,
+            ].map((id) => tabConfig(id, defaultScreen(id))).toList();
 
             await tester.pumpWidget(
               wrapTabView(
                 (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
-              ),
-            );
-
-            expectTab(1);
-
-            tabs.removeAt(2);
-
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: tabs.toList(),
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
-              ),
-            );
-
-            expectTab(1);
-
-            expect(find.text("Item3"), findsNothing);
-          });
-
-          testWidgets(
-              "stays on the same index (-> tab changes) when removing a tab in front of the current one",
-              (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
-
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
+                  tabs: tabs.toList(), // create a copy to avoid modifying this reference
                   navBarBuilder: (config) =>
                       Style1BottomNavBar(navBarConfig: config),
                 ),
@@ -225,20 +228,22 @@ void main() {
             await tester.pumpAndSettle();
 
             expectTab(3);
-          });
+          },
+        );
 
-          testWidgets(
-              "jumps to the initial index when removing a tab in front of the current one and old index would be out of range",
-              (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+        testWidgets(
+          "jumps to the initial index when removing a tab in front of the current one and old index would be out of range",
+          (tester) async {
+            final tabs = [
+              1,
+              2,
+              3,
+            ].map((id) => tabConfig(id, defaultScreen(id))).toList();
 
             await tester.pumpWidget(
               wrapTabView(
                 (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
+                  tabs: tabs.toList(), // create a copy to avoid modifying this reference
                   navBarBuilder: (config) =>
                       Style1BottomNavBar(navBarConfig: config),
                 ),
@@ -263,14 +268,17 @@ void main() {
             await tester.pumpAndSettle();
 
             expectTab(2);
-          });
+          },
+        );
 
-          testWidgets(
-              "jumps to the initial index when removing a tab and the new tab at that index has an onPressed callback",
-              (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+        testWidgets(
+          "jumps to the initial index when removing a tab and the new tab at that index has an onPressed callback",
+          (tester) async {
+            final tabs = [
+              1,
+              2,
+              3,
+            ].map((id) => tabConfig(id, defaultScreen(id))).toList();
             tabs[2] = PersistentTabConfig.noScreen(
               item: ItemConfig(
                 title: "Item3",
@@ -282,8 +290,7 @@ void main() {
             await tester.pumpWidget(
               wrapTabView(
                 (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
+                  tabs: tabs.toList(), // create a copy to avoid modifying this reference
                   navBarBuilder: (config) =>
                       Style1BottomNavBar(navBarConfig: config),
                 ),
@@ -308,14 +315,17 @@ void main() {
             await tester.pumpAndSettle();
 
             expectTab(2);
-          });
+          },
+        );
 
-          testWidgets(
-              "jumps to the first possible tab if the initial index has an onPressed callback after removing a tab and the new tab at that index also has an onPressed callback",
-              (tester) async {
-            final tabs = [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList();
+        testWidgets(
+          "jumps to the first possible tab if the initial index has an onPressed callback after removing a tab and the new tab at that index also has an onPressed callback",
+          (tester) async {
+            final tabs = [
+              1,
+              2,
+              3,
+            ].map((id) => tabConfig(id, defaultScreen(id))).toList();
             tabs[1] = PersistentTabConfig.noScreen(
               item: ItemConfig(
                 title: "Item2",
@@ -327,8 +337,7 @@ void main() {
             await tester.pumpWidget(
               wrapTabView(
                 (context) => PersistentTabView(
-                  tabs: tabs
-                      .toList(), // create a copy to avoid modifying this reference
+                  tabs: tabs.toList(), // create a copy to avoid modifying this reference
                   navBarBuilder: (config) =>
                       Style1BottomNavBar(navBarConfig: config),
                 ),
@@ -352,59 +361,58 @@ void main() {
             await tester.pumpAndSettle();
 
             expectTab(3);
-          });
+          },
+        );
 
-          testWidgets("and re-adding tabs", (tester) async {
-            final List<PersistentTabConfig> localTabs = tabs();
+        testWidgets("and re-adding tabs", (tester) async {
+          final List<PersistentTabConfig> localTabs = tabs();
 
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: localTabs,
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-            );
+            ),
+          );
 
-            expectTab(0);
-            expect(find.byType(Icon), findsNWidgets(3));
+          expectTab(0);
+          expect(find.byType(Icon), findsNWidgets(3));
 
-            localTabs.removeAt(0);
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: localTabs,
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
+          localTabs.removeAt(0);
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-            );
-            await tester.pump();
+            ),
+          );
+          await tester.pump();
 
-            expectTab(1);
-            expect(find.byType(Icon), findsNWidgets(2));
+          expectTab(1);
+          expect(find.byType(Icon), findsNWidgets(2));
 
-            localTabs.insert(0, tabConfig(0, defaultScreen(0)));
+          localTabs.insert(0, tabConfig(0, defaultScreen(0)));
 
-            await tester.pumpWidget(
-              wrapTabView(
-                (context) => PersistentTabView(
-                  tabs: localTabs,
-                  navBarBuilder: (config) =>
-                      Style1BottomNavBar(navBarConfig: config),
-                ),
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-            );
-            await tester.pump();
+            ),
+          );
+          await tester.pump();
 
-            expectTab(0);
-            expect(find.byType(Icon), findsNWidgets(3));
-          });
+          expectTab(0);
+          expect(find.byType(Icon), findsNWidgets(3));
         });
-      },
-      skip: "misses proper tab equality checks",
-    );
+      });
+    }, skip: "misses proper tab equality checks");
 
     testWidgets("hides the navbar when hideNavBar is true", (tester) async {
       await tester.pumpWidget(
@@ -469,10 +477,8 @@ void main() {
         wrapTabView(
           (context) => PersistentTabView(
             tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
-              height: height,
-            ),
+            navBarBuilder: (config) =>
+                Style1BottomNavBar(navBarConfig: config, height: height),
           ),
         ),
       );
@@ -483,8 +489,9 @@ void main() {
       );
     });
 
-    testWidgets("puts no padding around the navbar when margin is zero",
-        (tester) async {
+    testWidgets("puts no padding around the navbar when margin is zero", (
+      tester,
+    ) async {
       const margin = EdgeInsets.zero;
 
       await tester.pumpWidget(
@@ -509,8 +516,9 @@ void main() {
       );
     });
 
-    testWidgets("puts padding around the navbar when margin is set",
-        (tester) async {
+    testWidgets("puts padding around the navbar when margin is set", (
+      tester,
+    ) async {
       EdgeInsets margin = EdgeInsets.zero;
 
       await tester.pumpWidget(
@@ -584,8 +592,9 @@ void main() {
             tabs: tabs(),
             navBarBuilder: (config) => Style1BottomNavBar(
               navBarConfig: config,
-              navBarDecoration:
-                  const NavBarDecoration(color: Color(0xFFFFC107)),
+              navBarDecoration: const NavBarDecoration(
+                color: Color(0xFFFFC107),
+              ),
             ),
           ),
         ),
@@ -593,19 +602,20 @@ void main() {
 
       expect(
         ((tester.firstWidget(
-          find.descendant(
-            of: find.byType(DecoratedNavBar),
-            matching: find.byType(DecoratedBox),
-          ),
-        ) as DecoratedBox?)
-                ?.decoration as BoxDecoration?)
+                  find.descendant(
+                    of: find.byType(DecoratedNavBar),
+                    matching: find.byType(DecoratedBox),
+                  ),
+                ) as DecoratedBox?)?.decoration
+                as BoxDecoration?)
             ?.color,
         const Color(0xFFFFC107),
       );
     });
 
-    testWidgets("navbar applies filter if color is (partially) transparent",
-        (tester) async {
+    testWidgets("navbar applies filter if color is (partially) transparent", (
+      tester,
+    ) async {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -644,30 +654,31 @@ void main() {
     });
 
     testWidgets(
-        "executes onPopInvokedWithResult of enclosing PopScope when exiting",
-        (tester) async {
-      bool? popResult;
+      "executes onPopInvokedWithResult of enclosing PopScope when exiting",
+      (tester) async {
+        bool? popResult;
 
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PopScope(
-            canPop: false,
-            onPopInvokedWithResult: (didPop, result) {
-              popResult = didPop;
-            },
-            child: PersistentTabView(
-              tabs: tabs(),
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                popResult = didPop;
+              },
+              child: PersistentTabView(
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tapAndroidBackButton(tester);
+        await tapAndroidBackButton(tester);
 
-      expect(popResult, false);
-    });
+        expect(popResult, false);
+      },
+    );
 
     group("should handle Android back button press and thus", () {
       testWidgets("switches to first tab on back button press", (tester) async {
@@ -754,64 +765,66 @@ void main() {
       });
 
       testWidgets(
-          "pops main screen when historyLength is 1 and switched to initial tab",
-          (tester) async {
-        await tester.pumpWidget(
-          wrapTabViewWithMainScreen(
-            (context) => PersistentTabView(
-              controller: PersistentTabController(historyLength: 1),
-              tabs: tabs(),
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+        "pops main screen when historyLength is 1 and switched to initial tab",
+        (tester) async {
+          await tester.pumpWidget(
+            wrapTabViewWithMainScreen(
+              (context) => PersistentTabView(
+                controller: PersistentTabController(historyLength: 1),
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
             ),
-          ),
-        );
+          );
 
-        await tapElevatedButton(tester);
-        expectTab(0);
+          await tapElevatedButton(tester);
+          expectTab(0);
 
-        await tapItem(tester, 1);
-        expectTab(1);
+          await tapItem(tester, 1);
+          expectTab(1);
 
-        await tapItem(tester, 0);
-        expectTab(0);
+          await tapItem(tester, 0);
+          expectTab(0);
 
-        await tapAndroidBackButton(tester);
-        expectMainScreen();
-      });
+          await tapAndroidBackButton(tester);
+          expectMainScreen();
+        },
+      );
 
       testWidgets(
-          "pops main screen when historyLength is 1 and initial tab has subpage",
-          (tester) async {
-        await tester.pumpWidget(
-          wrapTabViewWithMainScreen(
-            (context) => PersistentTabView(
-              controller: PersistentTabController(historyLength: 1),
-              tabs: tabs(),
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+        "pops main screen when historyLength is 1 and initial tab has subpage",
+        (tester) async {
+          await tester.pumpWidget(
+            wrapTabViewWithMainScreen(
+              (context) => PersistentTabView(
+                controller: PersistentTabController(historyLength: 1),
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
             ),
-          ),
-        );
+          );
 
-        await tapElevatedButton(tester);
-        expectTab(0);
+          await tapElevatedButton(tester);
+          expectTab(0);
 
-        await tapElevatedButton(tester);
-        expectTab(0, level: 1);
+          await tapElevatedButton(tester);
+          expectTab(0, level: 1);
 
-        await tapItem(tester, 1);
-        expectTab(1);
+          await tapItem(tester, 1);
+          expectTab(1);
 
-        await tapAndroidBackButton(tester);
-        expectTab(0, level: 1);
+          await tapAndroidBackButton(tester);
+          expectTab(0, level: 1);
 
-        await tapAndroidBackButton(tester);
-        expectTab(0);
+          await tapAndroidBackButton(tester);
+          expectTab(0);
 
-        await tapAndroidBackButton(tester);
-        expectMainScreen();
-      });
+          await tapAndroidBackButton(tester);
+          expectMainScreen();
+        },
+      );
 
       testWidgets("pops main screen when historyLength is 2", (tester) async {
         await tester.pumpWidget(
@@ -845,65 +858,67 @@ void main() {
       });
 
       testWidgets(
-          "pops main screen when historyLength is 2 and clearing history",
-          (tester) async {
-        await tester.pumpWidget(
-          wrapTabViewWithMainScreen(
-            (context) => PersistentTabView(
-              controller: PersistentTabController(
-                historyLength: 2,
-                clearHistoryOnInitialIndex: true,
+        "pops main screen when historyLength is 2 and clearing history",
+        (tester) async {
+          await tester.pumpWidget(
+            wrapTabViewWithMainScreen(
+              (context) => PersistentTabView(
+                controller: PersistentTabController(
+                  historyLength: 2,
+                  clearHistoryOnInitialIndex: true,
+                ),
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              tabs: tabs(),
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
             ),
-          ),
-        );
+          );
 
-        await tapElevatedButton(tester);
-        expectTab(0);
+          await tapElevatedButton(tester);
+          expectTab(0);
 
-        await tapItem(tester, 1);
-        expectTab(1);
+          await tapItem(tester, 1);
+          expectTab(1);
 
-        await tapItem(tester, 0);
-        expectTab(0);
+          await tapItem(tester, 0);
+          expectTab(0);
 
-        await tapAndroidBackButton(tester);
-        expectMainScreen();
-      });
+          await tapAndroidBackButton(tester);
+          expectMainScreen();
+        },
+      );
 
       testWidgets(
-          "pops main screen when historyLength is 2 and clears repeating tabs in history",
-          (tester) async {
-        await tester.pumpWidget(
-          wrapTabViewWithMainScreen(
-            (context) => PersistentTabView(
-              controller: PersistentTabController(historyLength: 2),
-              tabs: tabs(),
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+        "pops main screen when historyLength is 2 and clears repeating tabs in history",
+        (tester) async {
+          await tester.pumpWidget(
+            wrapTabViewWithMainScreen(
+              (context) => PersistentTabView(
+                controller: PersistentTabController(historyLength: 2),
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
             ),
-          ),
-        );
+          );
 
-        await tapElevatedButton(tester);
-        expectTab(0);
+          await tapElevatedButton(tester);
+          expectTab(0);
 
-        await tapItem(tester, 1);
-        expectTab(1);
+          await tapItem(tester, 1);
+          expectTab(1);
 
-        await tapItem(tester, 0);
-        expectTab(0);
+          await tapItem(tester, 0);
+          expectTab(0);
 
-        await tapItem(tester, 1);
-        expectTab(1);
+          await tapItem(tester, 1);
+          expectTab(1);
 
-        await tapAndroidBackButton(tester);
-        await tapAndroidBackButton(tester);
-        expectMainScreen();
-      });
+          await tapAndroidBackButton(tester);
+          await tapAndroidBackButton(tester);
+          expectMainScreen();
+        },
+      );
     });
 
     testWidgets("controller can open drawer", (tester) async {
@@ -927,8 +942,9 @@ void main() {
     });
 
     group("should not handle Android back button press and thus", () {
-      testWidgets("does not switch the tab on back button press",
-          (tester) async {
+      testWidgets("does not switch the tab on back button press", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           wrapTabView(
             (context) => PersistentTabView(
@@ -971,56 +987,60 @@ void main() {
     });
 
     testWidgets(
-        "hides nav bar after the specified amount of pixels have been scrolled",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: List.generate(3, (id) => tabConfig(id, scrollableScreen(id))),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
+      "hides nav bar after the specified amount of pixels have been scrolled",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => tabConfig(id, scrollableScreen(id)),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              hideOnScrollVelocity: 200,
             ),
-            hideOnScrollVelocity: 200,
           ),
-        ),
-      );
+        );
 
-      final initialHeight =
-          tester.getSize(find.byType(DecoratedNavBar).first).height;
+        final initialHeight = tester
+            .getSize(find.byType(DecoratedNavBar).first)
+            .height;
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -100));
+        await scroll(tester, const Offset(0, 200), const Offset(0, -100));
 
-      expect(
-        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
-        findsOneWidget,
-      );
-      expect(
-        (tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600)
-            .toStringAsPrecision(2),
-        equals(
-          (Curves.ease.transform(0.5) * initialHeight).toStringAsPrecision(2),
-        ),
-      );
+        expect(
+          find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+          findsOneWidget,
+        );
+        expect(
+          (tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600)
+              .toStringAsPrecision(2),
+          equals(
+            (Curves.ease.transform(0.5) * initialHeight).toStringAsPrecision(2),
+          ),
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -100));
-      expect(
-        tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
-        equals(initialHeight),
-      );
+        await scroll(tester, const Offset(0, 200), const Offset(0, -100));
+        expect(
+          tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
+          equals(initialHeight),
+        );
 
-      expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
-      await scroll(tester, const Offset(0, 200), const Offset(0, 200));
+        expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
+        await scroll(tester, const Offset(0, 200), const Offset(0, 200));
 
-      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
-      expect(
-        tester.getSize(find.byType(DecoratedNavBar).first).height,
-        equals(initialHeight),
-      );
-      expect(
-        tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
-        equals(0),
-      );
-    });
+        expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+        expect(
+          tester.getSize(find.byType(DecoratedNavBar).first).height,
+          equals(initialHeight),
+        );
+        expect(
+          tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
+          equals(0),
+        );
+      },
+    );
 
     testWidgets("navBarPadding adds padding inside navBar", (tester) async {
       await tester.pumpWidget(
@@ -1029,14 +1049,16 @@ void main() {
             tabs: tabs(),
             navBarBuilder: (config) => Style1BottomNavBar(
               navBarConfig: config,
-              navBarDecoration:
-                  const NavBarDecoration(padding: EdgeInsets.zero),
+              navBarDecoration: const NavBarDecoration(
+                padding: EdgeInsets.zero,
+              ),
             ),
           ),
         ),
       );
-      final double originalHeight =
-          tester.getSize(find.byType(DecoratedNavBar).first).height;
+      final double originalHeight = tester
+          .getSize(find.byType(DecoratedNavBar).first)
+          .height;
 
       await tester.pumpWidget(
         wrapTabView(
@@ -1044,8 +1066,9 @@ void main() {
             tabs: tabs(),
             navBarBuilder: (config) => Style1BottomNavBar(
               navBarConfig: config,
-              navBarDecoration:
-                  const NavBarDecoration(padding: EdgeInsets.all(4)),
+              navBarDecoration: const NavBarDecoration(
+                padding: EdgeInsets.all(4),
+              ),
             ),
           ),
         ),
@@ -1057,83 +1080,89 @@ void main() {
     });
 
     testWidgets(
-        "navBarPadding does not make navbar bigger when height is fixed",
-        (tester) async {
-      const double height = kBottomNavigationBarHeight;
+      "navBarPadding does not make navbar bigger when height is fixed",
+      (tester) async {
+        const double height = kBottomNavigationBarHeight;
 
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
-              navBarDecoration:
-                  const NavBarDecoration(padding: EdgeInsets.all(4)),
-              height: height,
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) => Style1BottomNavBar(
+                navBarConfig: config,
+                navBarDecoration: const NavBarDecoration(
+                  padding: EdgeInsets.all(4),
+                ),
+                height: height,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        tester.getSize(find.byType(DecoratedNavBar)).height,
-        equals(height),
-      );
-    });
+        expect(
+          tester.getSize(find.byType(DecoratedNavBar)).height,
+          equals(height),
+        );
+      },
+    );
 
     testWidgets(
-        "resizes screens to avoid bottom inset according to resizeToAvoidBottomInset",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => MediaQuery(
-            data: const MediaQueryData(
-              viewInsets:
-                  EdgeInsets.only(bottom: 100), // Simulate an open keyboard
-            ),
-            child: Builder(
-              builder: (context) => PersistentTabView(
-                tabs: tabs(),
-                navBarBuilder: (config) =>
-                    Style1BottomNavBar(navBarConfig: config),
+      "resizes screens to avoid bottom inset according to resizeToAvoidBottomInset",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => MediaQuery(
+              data: const MediaQueryData(
+                viewInsets: EdgeInsets.only(
+                  bottom: 100,
+                ), // Simulate an open keyboard
+              ),
+              child: Builder(
+                builder: (context) => PersistentTabView(
+                  tabs: tabs(),
+                  navBarBuilder: (config) =>
+                      Style1BottomNavBar(navBarConfig: config),
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        tester.getSize(find.byType(CustomTabView).first).height,
-        equals(500),
-      );
+        expect(
+          tester.getSize(find.byType(CustomTabView).first).height,
+          equals(500),
+        );
 
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => MediaQuery(
-            data: const MediaQueryData(
-              viewInsets:
-                  EdgeInsets.only(bottom: 100), // Simulate an open keyboard
-            ),
-            child: Builder(
-              builder: (context) => PersistentTabView(
-                tabs: tabs(),
-                navBarBuilder: (config) =>
-                    Style1BottomNavBar(navBarConfig: config),
-                resizeToAvoidBottomInset: false,
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => MediaQuery(
+              data: const MediaQueryData(
+                viewInsets: EdgeInsets.only(
+                  bottom: 100,
+                ), // Simulate an open keyboard
+              ),
+              child: Builder(
+                builder: (context) => PersistentTabView(
+                  tabs: tabs(),
+                  navBarBuilder: (config) =>
+                      Style1BottomNavBar(navBarConfig: config),
+                  resizeToAvoidBottomInset: false,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        tester.getSize(find.byType(CustomTabView).first).height,
-        equals(600 - tester.getSize(find.byType(DecoratedNavBar)).height),
-      );
-    });
+        expect(
+          tester.getSize(find.byType(CustomTabView).first).height,
+          equals(600 - tester.getSize(find.byType(DecoratedNavBar)).height),
+        );
+      },
+    );
 
-    testWidgets("shrinks screens according to NavBarOverlap.custom",
-        (tester) async {
+    testWidgets("shrinks screens according to NavBarOverlap.custom", (
+      tester,
+    ) async {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -1182,356 +1211,374 @@ void main() {
     });
 
     testWidgets(
-        "doesnt pop any screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.none`",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              popAction: PopActionType.none,
-            ),
-          ),
-        ),
-      );
-
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
-
-    testWidgets(
-        "pops all screens when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.all`",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              popAction: PopActionType.all,
-            ),
-          ),
-        ),
-      );
-
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapElevatedButton(tester);
-      expectTab(0, level: 2);
-      await tapItem(tester, 0);
-      expectTab(0);
-    });
-
-    testWidgets(
-        "pops a single screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.single`",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              popAction: PopActionType.single,
-            ),
-          ),
-        ),
-      );
-
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapElevatedButton(tester);
-      expectTab(0, level: 2);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
-
-    testWidgets(
-        "runs callback when selected tab is tapped again and there are no screens pushed",
-        (tester) async {
-      bool callbackGotExecuted = false;
-      bool areScreensPushed = false;
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: SelectedTabPressConfig(
-              onPressed: (hasPages) {
-                areScreensPushed = hasPages;
-                callbackGotExecuted = true;
-              },
-            ),
-          ),
-        ),
-      );
-
-      expectTab(0);
-      await tapItem(tester, 0);
-      expect(areScreensPushed, equals(false));
-      expect(callbackGotExecuted, equals(true));
-    });
-
-    testWidgets(
-        "runs callback when selected tab is tapped again and there are screens pushed",
-        (tester) async {
-      bool callbackGotExecuted = false;
-      bool areScreensPushed = false;
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: SelectedTabPressConfig(
-              onPressed: (hasPages) {
-                areScreensPushed = hasPages;
-                callbackGotExecuted = true;
-              },
-            ),
-          ),
-        ),
-      );
-
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 0);
-      expect(areScreensPushed, equals(true));
-      expect(callbackGotExecuted, equals(true));
-    });
-
-    testWidgets(
-        "scrolls the tab content to top when the selected tab is tapped again and it is enabled",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: List.generate(
-              3,
-              (id) => tabConfig(
-                id,
-                scrollableScreen(
-                  id,
-                  controller: controllers[id],
-                ),
-                controllers[id],
+      "doesnt pop any screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.none`",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                popAction: PopActionType.none,
               ),
             ),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              scrollToTop: true,
-            ),
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
-
-      expectNotTab(0);
-
-      await tapItem(tester, 0);
-
-      expectTab(0);
-      expect(controllers[0].offset, equals(0));
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
 
     testWidgets(
-        "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: List.generate(
-              3,
-              (id) => tabConfig(
-                id,
-                scrollableScreen(
-                  id,
-                  controller: controllers[id],
-                ),
-                controllers[id],
+      "pops all screens when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.all`",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                popAction: PopActionType.all,
               ),
             ),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              scrollToTop: false,
-            ),
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
-
-      expectNotTab(0);
-
-      await tapItem(tester, 0);
-
-      expectNotTab(0);
-      expect(controllers[0].offset, isNot(0));
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapElevatedButton(tester);
+        expectTab(0, level: 2);
+        await tapItem(tester, 0);
+        expectTab(0);
+      },
+    );
 
     testWidgets(
-        "scrollToTop is enabled but switching to a new tab does not scroll immediately",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: List.generate(
-              3,
-              (id) => tabConfig(
-                id,
-                scrollableScreen(
-                  id,
-                  controller: controllers[id],
-                ),
-                controllers[id],
+      "pops a single screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.single`",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                popAction: PopActionType.single,
               ),
             ),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabPressConfig: const SelectedTabPressConfig(
-              scrollToTop: true,
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapElevatedButton(tester);
+        expectTab(0, level: 2);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
+
+    testWidgets(
+      "runs callback when selected tab is tapped again and there are no screens pushed",
+      (tester) async {
+        bool callbackGotExecuted = false;
+        bool areScreensPushed = false;
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: SelectedTabPressConfig(
+                onPressed: (hasPages) {
+                  areScreensPushed = hasPages;
+                  callbackGotExecuted = true;
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
-
-      expectNotTab(0);
-
-      await tapItem(tester, 1);
-      await tapItem(tester, 0);
-
-      expectNotTab(0);
-      expect(controllers[0].offset, isNot(0));
-    });
+        expectTab(0);
+        await tapItem(tester, 0);
+        expect(areScreensPushed, equals(false));
+        expect(callbackGotExecuted, equals(true));
+      },
+    );
 
     testWidgets(
-        "does keep navigator history when `keepNaviagotHistory == true`",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            keepNavigatorHistory: true,
-          ),
-        ),
-      );
+      "runs callback when selected tab is tapped again and there are screens pushed",
+      (tester) async {
+        bool callbackGotExecuted = false;
+        bool areScreensPushed = false;
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: SelectedTabPressConfig(
+                onPressed: (hasPages) {
+                  areScreensPushed = hasPages;
+                  callbackGotExecuted = true;
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 0);
+        expect(areScreensPushed, equals(true));
+        expect(callbackGotExecuted, equals(true));
+      },
+    );
 
     testWidgets(
-        "doesnt keep any navigator history when `keepNaviagotHistory == false`",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            keepNavigatorHistory: false,
+      "scrolls the tab content to top when the selected tab is tapped again and it is enabled",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => tabConfig(
+                  id,
+                  scrollableScreen(id, controller: controllers[id]),
+                  controllers[id],
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: true,
+              ),
+            ),
           ),
-        ),
-      );
+        );
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      await tapItem(tester, 0);
-      expectTab(0);
-    });
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-    testWidgets("persists screens while switching if stateManagement turned on",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-          ),
-        ),
-      );
+        expectNotTab(0);
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      expectTab(1);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
+        await tapItem(tester, 0);
 
-    testWidgets("trashes screens while switching if stateManagement turned off",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            stateManagement: false,
-          ),
-        ),
-      );
-
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      expectTab(1);
-      await tapItem(tester, 0);
-      expectTab(0);
-    });
+        expectTab(0);
+        expect(controllers[0].offset, equals(0));
+      },
+    );
 
     testWidgets(
-        "changes animation direction when switching tabs if TextDirection is RTL",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => Directionality(
-            textDirection: TextDirection.rtl,
-            child: PersistentTabView(
+      "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => tabConfig(
+                  id,
+                  scrollableScreen(id, controller: controllers[id]),
+                  controllers[id],
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: false,
+              ),
+            ),
+          ),
+        );
+
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+
+        expectNotTab(0);
+
+        await tapItem(tester, 0);
+
+        expectNotTab(0);
+        expect(controllers[0].offset, isNot(0));
+      },
+    );
+
+    testWidgets(
+      "scrollToTop is enabled but switching to a new tab does not scroll immediately",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => tabConfig(
+                  id,
+                  scrollableScreen(id, controller: controllers[id]),
+                  controllers[id],
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: true,
+              ),
+            ),
+          ),
+        );
+
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+
+        expectNotTab(0);
+
+        await tapItem(tester, 1);
+        await tapItem(tester, 0);
+
+        expectNotTab(0);
+        expect(controllers[0].offset, isNot(0));
+      },
+    );
+
+    testWidgets(
+      "does keep navigator history when `keepNaviagotHistory == true`",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              keepNavigatorHistory: true,
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
+
+    testWidgets(
+      "doesnt keep any navigator history when `keepNaviagotHistory == false`",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              keepNavigatorHistory: false,
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        await tapItem(tester, 0);
+        expectTab(0);
+      },
+    );
+
+    testWidgets(
+      "persists screens while switching if stateManagement turned on",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
               tabs: tabs(),
               navBarBuilder: (config) =>
                   Style1BottomNavBar(navBarConfig: config),
             ),
           ),
-        ),
-      );
+        );
 
-      expectTab(0);
-      await tester.tap(find.text("Item1"));
-      await tester.pump(Durations.short1);
-      await tester.pump(Durations.short1);
-      // 400 is the horizontal center of the screen, so tab 0 should leave towards the right and tab 1 should enter from the left
-      expect(tester.getCenter(find.text("Tab 0")).dx, greaterThan(400));
-      expect(tester.getCenter(find.text("Tab 1")).dx, lessThan(400));
-      await tester.pumpAndSettle();
-      expectTab(1);
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        expectTab(1);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
+
+    testWidgets(
+      "trashes screens while switching if stateManagement turned off",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              stateManagement: false,
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        expectTab(1);
+        await tapItem(tester, 0);
+        expectTab(0);
+      },
+    );
+
+    testWidgets(
+      "changes animation direction when switching tabs if TextDirection is RTL",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => Directionality(
+              textDirection: TextDirection.rtl,
+              child: PersistentTabView(
+                tabs: tabs(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          ),
+        );
+
+        expectTab(0);
+        await tester.tap(find.text("Item1"));
+        await tester.pump(Durations.short1);
+        await tester.pump(Durations.short1);
+        // 400 is the horizontal center of the screen, so tab 0 should leave towards the right and tab 1 should enter from the left
+        expect(tester.getCenter(find.text("Tab 0")).dx, greaterThan(400));
+        expect(tester.getCenter(find.text("Tab 1")).dx, lessThan(400));
+        await tester.pumpAndSettle();
+        expectTab(1);
+      },
+    );
 
     testWidgets("custom animated builder", (tester) async {
       await tester.pumpWidget(
@@ -1541,16 +1588,18 @@ void main() {
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
             animatedTabBuilder:
                 (context, index, animation, oldTabIndex, newTabIndex, child) {
-              final double yOffset = newTabIndex > index
-                  ? -animation
-                  : (newTabIndex < index
-                      ? animation
-                      : (index < oldTabIndex ? animation - 1 : 1 - animation));
-              return FractionalTranslation(
-                translation: Offset(yOffset, 0),
-                child: child,
-              );
-            },
+                  final double yOffset = newTabIndex > index
+                      ? -animation
+                      : (newTabIndex < index
+                            ? animation
+                            : (index < oldTabIndex
+                                  ? animation - 1
+                                  : 1 - animation));
+                  return FractionalTranslation(
+                    translation: Offset(yOffset, 0),
+                    child: child,
+                  );
+                },
           ),
         ),
       );
@@ -1566,8 +1615,9 @@ void main() {
       expectTab(1);
     });
 
-    testWidgets("no animation when ScreenTransitionAnimation.none()",
-        (tester) async {
+    testWidgets("no animation when ScreenTransitionAnimation.none()", (
+      tester,
+    ) async {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -1622,8 +1672,9 @@ void main() {
       expectTab(1);
     });
 
-    testWidgets("changes screens programmatically when gestures are enabled",
-        (tester) async {
+    testWidgets("changes screens programmatically when gestures are enabled", (
+      tester,
+    ) async {
       final controller = PersistentTabController();
 
       await tester.pumpWidget(
@@ -1644,82 +1695,89 @@ void main() {
     });
 
     testWidgets(
-        "trashes screens while switching if stateManagement turned off with gestures enabled",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            stateManagement: false,
-            gestureNavigationEnabled: true,
+      "trashes screens while switching if stateManagement turned off with gestures enabled",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              stateManagement: false,
+              gestureNavigationEnabled: true,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      expectTab(1);
-      await tapItem(tester, 0);
-      expectTab(0);
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        expectTab(1);
+        await tapItem(tester, 0);
+        expectTab(0);
+      },
+    );
 
     testWidgets(
-        "persists screens while switching if stateManagement turned on with gestures enabled",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            stateManagement: true,
-            gestureNavigationEnabled: true,
+      "persists screens while switching if stateManagement turned on with gestures enabled",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              stateManagement: true,
+              gestureNavigationEnabled: true,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 1);
-      expectTab(1);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 1);
+        expectTab(1);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
 
     testWidgets(
-        "Style 13 and Style 14 center button are tappable above the navBar",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) =>
-                Style13BottomNavBar(navBarConfig: config),
+      "Style 13 and Style 14 center button are tappable above the navBar",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style13BottomNavBar(navBarConfig: config),
+            ),
           ),
-        ),
-      );
+        );
 
-      Offset topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
-      await tester.tapAt(topCenter.translate(0, -10));
-      await tester.pumpAndSettle();
-      expectTab(1);
+        Offset topCenter = tester
+            .getRect(find.byType(DecoratedNavBar))
+            .topCenter;
+        await tester.tapAt(topCenter.translate(0, -10));
+        await tester.pumpAndSettle();
+        expectTab(1);
 
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) =>
-                Style14BottomNavBar(navBarConfig: config),
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style14BottomNavBar(navBarConfig: config),
+            ),
           ),
-        ),
-      );
+        );
 
-      topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
-      await tester.tapAt(topCenter.translate(0, -10));
-      await tester.pumpAndSettle();
-      expectTab(1);
-    });
+        topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
+        await tester.tapAt(topCenter.translate(0, -10));
+        await tester.pumpAndSettle();
+        expectTab(1);
+      },
+    );
 
     testWidgets("automatically animates animated icons", (tester) async {
       final keys = [
@@ -1800,8 +1858,9 @@ void main() {
         expectTab(2, level: 1);
       });
 
-      testWidgets("to run onGenerateRoute of each tab navigator",
-          (tester) async {
+      testWidgets("to run onGenerateRoute of each tab navigator", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           wrapTabView(
             (context) => PersistentTabView(
@@ -1841,8 +1900,9 @@ void main() {
         expectTab(2, level: 1);
       });
 
-      testWidgets("to run onUnknownRoute of each tab navigator",
-          (tester) async {
+      testWidgets("to run onUnknownRoute of each tab navigator", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           wrapTabView(
             (context) => PersistentTabView(
@@ -1912,8 +1972,9 @@ void main() {
         expect(exception, isFlutterError);
       });
 
-      testWidgets("to report onUnknownRoute returning null as error",
-          (tester) async {
+      testWidgets("to report onUnknownRoute returning null as error", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           wrapTabView(
             (context) => PersistentTabView(
@@ -1951,9 +2012,7 @@ void main() {
       testWidgets("to populate routes of each tab navigator", (tester) async {
         await tester.pumpWidget(
           MaterialApp(
-            routes: {
-              "/details": (context) => defaultScreen(0, level: 1),
-            },
+            routes: {"/details": (context) => defaultScreen(0, level: 1)},
             home: PersistentTabView(
               tabs: List.generate(
                 3,
@@ -1986,8 +2045,9 @@ void main() {
         expectTab(0, level: 1);
       });
 
-      testWidgets("to run onGenerateRoute of each tab navigator",
-          (tester) async {
+      testWidgets("to run onGenerateRoute of each tab navigator", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             onGenerateRoute: (settings) => MaterialPageRoute(
@@ -2055,8 +2115,9 @@ void main() {
         expect(exception, isFlutterError);
       });
 
-      testWidgets("to report onUnknownRoute returning null as error",
-          (tester) async {
+      testWidgets("to report onUnknownRoute returning null as error", (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             onGenerateRoute: (settings) => null,
@@ -2127,171 +2188,177 @@ void main() {
     });
 
     testWidgets(
-        "doesnt pop any screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.none`",
-        (tester) async {
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: wrapWithGoRouter(
-            (context, state, shell) => PersistentTabView.router(
-              tabs: routerTabs(),
-              selectedTabPressConfig: const SelectedTabPressConfig(
-                popAction: PopActionType.none,
+      "doesnt pop any screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.none`",
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: wrapWithGoRouter(
+              (context, state, shell) => PersistentTabView.router(
+                tabs: routerTabs(),
+                selectedTabPressConfig: const SelectedTabPressConfig(
+                  popAction: PopActionType.none,
+                ),
+                navigationShell: shell,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              navigationShell: shell,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
             ),
           ),
-        ),
-      );
+        );
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
-      await tapItem(tester, 0);
-      expectTab(0, level: 1);
-    });
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
+        await tapItem(tester, 0);
+        expectTab(0, level: 1);
+      },
+    );
 
     testWidgets(
-        "runs callback when selected tab is tapped again and there are no screens pushed",
-        (tester) async {
-      bool callbackGotExecuted = false;
+      "runs callback when selected tab is tapped again and there are no screens pushed",
+      (tester) async {
+        bool callbackGotExecuted = false;
 
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: wrapWithGoRouter(
-            (context, state, shell) => PersistentTabView.router(
-              tabs: routerTabs(),
-              selectedTabPressConfig: SelectedTabPressConfig(
-                onPressed: (hasPages) {
-                  callbackGotExecuted = true;
-                },
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: wrapWithGoRouter(
+              (context, state, shell) => PersistentTabView.router(
+                tabs: routerTabs(),
+                selectedTabPressConfig: SelectedTabPressConfig(
+                  onPressed: (hasPages) {
+                    callbackGotExecuted = true;
+                  },
+                ),
+                navigationShell: shell,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              navigationShell: shell,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
             ),
           ),
-        ),
-      );
+        );
 
-      expectTab(0);
-      await tapItem(tester, 0);
-      expect(callbackGotExecuted, equals(true));
-    });
+        expectTab(0);
+        await tapItem(tester, 0);
+        expect(callbackGotExecuted, equals(true));
+      },
+    );
 
     testWidgets(
-        "scrolls the tab content to top when the selected tab is tapped again and it is enabled",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
+      "scrolls the tab content to top when the selected tab is tapped again and it is enabled",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: wrapWithGoRouter(
-            (context, state, shell) => PersistentTabView.router(
-              tabs: routerTabs(3, controllers),
-              selectedTabPressConfig: const SelectedTabPressConfig(
-                scrollToTop: true,
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: wrapWithGoRouter(
+              (context, state, shell) => PersistentTabView.router(
+                tabs: routerTabs(3, controllers),
+                selectedTabPressConfig: const SelectedTabPressConfig(
+                  scrollToTop: true,
+                ),
+                navigationShell: shell,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              navigationShell: shell,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+              scrollControllers: controllers,
             ),
-            scrollControllers: controllers,
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTab(0);
+        expectNotTab(0);
 
-      await tapItem(tester, 0);
+        await tapItem(tester, 0);
 
-      expectTab(0);
-      expect(controllers[0].offset, equals(0));
-    });
+        expectTab(0);
+        expect(controllers[0].offset, equals(0));
+      },
+    );
 
     testWidgets(
-        "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
+      "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: wrapWithGoRouter(
-            (context, state, shell) => PersistentTabView.router(
-              tabs: routerTabs(3, controllers),
-              selectedTabPressConfig: const SelectedTabPressConfig(
-                scrollToTop: false,
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: wrapWithGoRouter(
+              (context, state, shell) => PersistentTabView.router(
+                tabs: routerTabs(3, controllers),
+                selectedTabPressConfig: const SelectedTabPressConfig(
+                  scrollToTop: false,
+                ),
+                navigationShell: shell,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              navigationShell: shell,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+              scrollControllers: controllers,
             ),
-            scrollControllers: controllers,
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTab(0);
+        expectNotTab(0);
 
-      await tapItem(tester, 0);
+        await tapItem(tester, 0);
 
-      expectNotTab(0);
-      expect(controllers[0].offset, isNot(0));
-    });
+        expectNotTab(0);
+        expect(controllers[0].offset, isNot(0));
+      },
+    );
 
     testWidgets(
-        "scrollToTop is enabled but switching to a new tab does not scroll immediately",
-        (tester) async {
-      final controllers = [
-        ScrollController(),
-        ScrollController(),
-        ScrollController(),
-      ];
+      "scrollToTop is enabled but switching to a new tab does not scroll immediately",
+      (tester) async {
+        final controllers = [
+          ScrollController(),
+          ScrollController(),
+          ScrollController(),
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: wrapWithGoRouter(
-            (context, state, shell) => PersistentTabView.router(
-              tabs: routerTabs(3, controllers),
-              selectedTabPressConfig: const SelectedTabPressConfig(
-                scrollToTop: true,
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routerConfig: wrapWithGoRouter(
+              (context, state, shell) => PersistentTabView.router(
+                tabs: routerTabs(3, controllers),
+                selectedTabPressConfig: const SelectedTabPressConfig(
+                  scrollToTop: true,
+                ),
+                navigationShell: shell,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
               ),
-              navigationShell: shell,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
+              scrollControllers: controllers,
             ),
-            scrollControllers: controllers,
           ),
-        ),
-      );
+        );
 
-      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+        await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTab(0);
+        expectNotTab(0);
 
-      await tapItem(tester, 1);
-      await tapItem(tester, 0);
+        await tapItem(tester, 1);
+        await tapItem(tester, 0);
 
-      expectNotTab(0);
-      expect(controllers[0].offset, isNot(0));
-    });
+        expectNotTab(0);
+        expect(controllers[0].offset, isNot(0));
+      },
+    );
   });
 
   group("Regression", () {
-    testWidgets("#31 one navbar border side does not throw error",
-        (tester) async {
+    testWidgets("#31 one navbar border side does not throw error", (
+      tester,
+    ) async {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -2299,12 +2366,7 @@ void main() {
             navBarBuilder: (config) => Style1BottomNavBar(
               navBarConfig: config,
               navBarDecoration: const NavBarDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 2,
-                  ),
-                ),
+                border: Border(top: BorderSide(color: Colors.grey, width: 2)),
               ),
             ),
           ),
@@ -2313,101 +2375,89 @@ void main() {
     });
 
     testWidgets(
-        "#205 recreating the tabs config does not lose the navigation state of any tab",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
-              navBarDecoration: const NavBarDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 2,
-                  ),
+      "#205 recreating the tabs config does not lose the navigation state of any tab",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) => Style1BottomNavBar(
+                navBarConfig: config,
+                navBarDecoration: const NavBarDecoration(
+                  border: Border(top: BorderSide(color: Colors.grey, width: 2)),
                 ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tapElevatedButton(tester);
-      expectTab(0, level: 1);
+        await tapElevatedButton(tester);
+        expectTab(0, level: 1);
 
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: tabs(),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
-              navBarDecoration: const NavBarDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 2,
-                  ),
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) => Style1BottomNavBar(
+                navBarConfig: config,
+                navBarDecoration: const NavBarDecoration(
+                  border: Border(top: BorderSide(color: Colors.grey, width: 2)),
                 ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expectTab(0, level: 1);
-    });
+        expectTab(0, level: 1);
+      },
+    );
 
     testWidgets(
-        "#225 does not hide nav bar when coming back from overscroll (scrolling back up after scrolling down enough to hide the nav bar) ()",
-        (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: List.generate(
-              3,
-              (id) => tabConfig(
-                id,
-                scrollableScreen(
+      "#225 does not hide nav bar when coming back from overscroll (scrolling back up after scrolling down enough to hide the nav bar) ()",
+      (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => tabConfig(
                   id,
-                  physics: const BouncingScrollPhysics(),
+                  scrollableScreen(id, physics: const BouncingScrollPhysics()),
                 ),
               ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+              hideOnScrollVelocity: 200,
             ),
-            navBarBuilder: (config) => Style1BottomNavBar(
-              navBarConfig: config,
-            ),
-            hideOnScrollVelocity: 200,
           ),
-        ),
-      );
+        );
 
-      final gesture = await tester.startGesture(const Offset(0, 200));
+        final gesture = await tester.startGesture(const Offset(0, 200));
 
-      await gesture.moveBy(const Offset(0, 100));
-      await tester.pumpAndSettle();
+        await gesture.moveBy(const Offset(0, 100));
+        await tester.pumpAndSettle();
 
-      expect(
-        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
-        findsOneWidget,
-      );
-      expect(
-        tester.getRect(find.byType(DecoratedNavBar).first).bottom,
-        equals(600),
-      );
+        expect(
+          find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+          findsOneWidget,
+        );
+        expect(
+          tester.getRect(find.byType(DecoratedNavBar).first).bottom,
+          equals(600),
+        );
 
-      await gesture.moveBy(const Offset(0, -100));
-      await tester.pumpAndSettle();
+        await gesture.moveBy(const Offset(0, -100));
+        await tester.pumpAndSettle();
 
-      expect(
-        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
-        findsOneWidget,
-      );
-      expect(
-        tester.getRect(find.byType(DecoratedNavBar).first).bottom,
-        equals(600),
-      );
-    });
+        expect(
+          find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+          findsOneWidget,
+        );
+        expect(
+          tester.getRect(find.byType(DecoratedNavBar).first).bottom,
+          equals(600),
+        );
+      },
+    );
   });
 }

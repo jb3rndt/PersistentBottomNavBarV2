@@ -7,12 +7,12 @@ class PersistentTabController extends ChangeNotifier {
     this.initialIndex = 0,
     this.historyLength = 5,
     this.clearHistoryOnInitialIndex = false,
-  })  : _index = initialIndex,
-        assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0"),
-        assert(
-          historyLength >= 0,
-          "Nav Bar history length cannot be less than 0",
-        );
+  }) : _index = initialIndex,
+       assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0"),
+       assert(
+         historyLength >= 0,
+         "Nav Bar history length cannot be less than 0",
+       );
 
   final int initialIndex;
 

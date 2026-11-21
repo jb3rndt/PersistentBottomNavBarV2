@@ -56,7 +56,6 @@ linter:
     - always_put_required_named_parameters_first
     - annotate_overrides
     - avoid_annotating_with_dynamic
-    - avoid_null_checks_in_equality_operators
     - avoid_multiple_declarations_per_line
     - avoid_init_to_null
     - avoid_function_literals_in_foreach_calls
@@ -102,7 +101,6 @@ linter:
     - null_check_on_nullable_type_parameter
     - noop_primitive_operations
     - null_closures
-    - one_member_abstracts
     - only_throw_errors
     - overridden_fields
     - package_prefixed_library_names
@@ -146,7 +144,6 @@ linter:
     - tighten_type_of_initializing_formals
     - type_init_formals
     - unawaited_futures
-    - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_const
     - unnecessary_constructor_name
@@ -165,7 +162,6 @@ linter:
     - unnecessary_this
     - use_decorated_box
     - use_function_type_syntax_for_parameters
-    - use_if_null_to_convert_nulls_to_bools
     - use_is_even_rather_than_modulo
     - use_named_constants
     - use_rethrow_when_possible
