@@ -39,19 +39,19 @@ class CustomTabViewState extends State<CustomTabView> {
   }
 
   void _updateObservers() {
-    _navigatorObservers =
-        List<NavigatorObserver>.from(widget.navigatorConfig.navigatorObservers)
-          ..add(_heroController);
+    _navigatorObservers = List<NavigatorObserver>.from(
+      widget.navigatorConfig.navigatorObservers,
+    )..add(_heroController);
   }
 
   @override
   Widget build(BuildContext context) => Navigator(
-        key: widget.navigatorConfig.navigatorKey,
-        initialRoute: widget.navigatorConfig.initialRoute,
-        onGenerateRoute: _onGenerateRoute,
-        onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers,
-      );
+    key: widget.navigatorConfig.navigatorKey,
+    initialRoute: widget.navigatorConfig.initialRoute,
+    onGenerateRoute: _onGenerateRoute,
+    onUnknownRoute: _onUnknownRoute,
+    observers: _navigatorObservers,
+  );
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     final String? name = settings.name;
@@ -68,10 +68,10 @@ class CustomTabViewState extends State<CustomTabView> {
         settings: settings,
       );
     }
-    final Route? rootNavigatorRoute = Navigator.of(context, rootNavigator: true)
-        .widget
-        .onGenerateRoute
-        ?.call(settings);
+    final Route? rootNavigatorRoute = Navigator.of(
+      context,
+      rootNavigator: true,
+    ).widget.onGenerateRoute?.call(settings);
     if (rootNavigatorRoute != null) {
       return rootNavigatorRoute;
     }
@@ -82,39 +82,36 @@ class CustomTabViewState extends State<CustomTabView> {
   }
 
   Route<dynamic>? _onUnknownRoute(RouteSettings settings) {
-    assert(
-      () {
-        if (widget.navigatorConfig.onUnknownRoute == null) {
-          throw FlutterError(
-            "Could not find a generator for route $settings in the $runtimeType.\n"
-            "Generators for routes are searched for in the following order:\n"
-            ' 1. For the "/" route, the "builder" property, if non-null, is used.\n'
-            ' 2. Otherwise, the "routes" table is used, if it has an entry for '
-            "the route.\n"
-            " 3. Otherwise, onGenerateRoute is called. It should return a "
-            'non-null value for any valid route not handled by "builder" and "routes".\n'
-            " 4. Finally if all else fails onUnknownRoute is called.\n"
-            "Unfortunately, onUnknownRoute was not set.",
-          );
-        }
-        return true;
-      }(),
+    assert(() {
+      if (widget.navigatorConfig.onUnknownRoute == null) {
+        throw FlutterError(
+          "Could not find a generator for route $settings in the $runtimeType.\n"
+          "Generators for routes are searched for in the following order:\n"
+          ' 1. For the "/" route, the "builder" property, if non-null, is used.\n'
+          ' 2. Otherwise, the "routes" table is used, if it has an entry for '
+          "the route.\n"
+          " 3. Otherwise, onGenerateRoute is called. It should return a "
+          'non-null value for any valid route not handled by "builder" and "routes".\n'
+          " 4. Finally if all else fails onUnknownRoute is called.\n"
+          "Unfortunately, onUnknownRoute was not set.",
+        );
+      }
+      return true;
+    }());
+    final Route<dynamic>? result = widget.navigatorConfig.onUnknownRoute!(
+      settings,
     );
-    final Route<dynamic>? result =
-        widget.navigatorConfig.onUnknownRoute!(settings);
-    assert(
-      () {
-        if (result == null) {
-          throw FlutterError(
-            "The onUnknownRoute callback returned null.\n"
-            "When the $runtimeType requested the route $settings from its "
-            "onUnknownRoute callback, the callback returned null. Such callbacks "
-            "must never return null.",
-          );
-        }
-        return true;
-      }(),
-    );
+    assert(() {
+      if (result == null) {
+        throw FlutterError(
+          "The onUnknownRoute callback returned null.\n"
+          "When the $runtimeType requested the route $settings from its "
+          "onUnknownRoute callback, the callback returned null. Such callbacks "
+          "must never return null.",
+        );
+      }
+      return true;
+    }());
     return result;
   }
 }

@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_redundant_argument_values
 
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:material_ui/material_ui.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 void main() {
@@ -62,12 +62,10 @@ void main() {
       final config = NavigatorConfig(
         defaultTitle: "Default Title",
         routes: {"route": (context) => const SizedBox()},
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
-        onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
+        onGenerateRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
+        onUnknownRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
         initialRoute: "/",
         navigatorObservers: [NavigatorObserver()],
         navigatorKey: GlobalKey<NavigatorState>(),
@@ -75,12 +73,10 @@ void main() {
       final newConfig = config.copyWith(
         defaultTitle: "New Title",
         routes: {"newRoute": (context) => const SizedBox()},
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
-        onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
+        onGenerateRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
+        onUnknownRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
         initialRoute: "/new",
         navigatorObservers: [NavigatorObserver()],
         navigatorKey: GlobalKey<NavigatorState>(),
@@ -94,12 +90,10 @@ void main() {
       final config = NavigatorConfig(
         defaultTitle: "Default Title",
         routes: {"route": (context) => const SizedBox()},
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
-        onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SizedBox(),
-        ),
+        onGenerateRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
+        onUnknownRoute: (settings) =>
+            MaterialPageRoute(builder: (context) => const SizedBox()),
         initialRoute: "/",
         navigatorObservers: [NavigatorObserver()],
         navigatorKey: GlobalKey<NavigatorState>(),

@@ -5,9 +5,7 @@ class NavBarOverlap {
 
   const NavBarOverlap.none() : overlap = 0.0;
 
-  const NavBarOverlap.custom({
-    this.overlap = 0.0,
-  });
+  const NavBarOverlap.custom({this.overlap = 0.0});
 
   final double overlap;
 }

@@ -18,9 +18,9 @@ class ItemConfig {
       fontSize: 12,
     ),
     this.iconSize = 26.0,
-  })  : inactiveIcon = inactiveIcon ?? icon,
-        activeBackgroundColor = activeColorSecondary ??
-            activeForegroundColor.withValues(alpha: 0.2);
+  }) : inactiveIcon = inactiveIcon ?? icon,
+       activeBackgroundColor =
+           activeColorSecondary ?? activeForegroundColor.withValues(alpha: 0.2);
 
   /// Icon for the bar item.
   final Widget icon;
@@ -60,16 +60,16 @@ class PersistentTabConfig {
     required this.item,
     NavigatorConfig? navigatorConfig,
     this.scrollController,
-  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
-        onPressed = null;
+  }) : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+       onPressed = null;
 
   PersistentTabConfig.noScreen({
     required this.item,
     required void Function(BuildContext) this.onPressed,
     NavigatorConfig? navigatorConfig,
     this.scrollController,
-  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
-        screen = Container();
+  }) : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+       screen = Container();
 
   final Widget screen;
 
@@ -111,10 +111,8 @@ class SelectedTabPressConfig {
 }
 
 class PersistentRouterTabConfig extends PersistentTabConfig {
-  PersistentRouterTabConfig({
-    required super.item,
-    super.scrollController,
-  }) : super(screen: Container());
+  PersistentRouterTabConfig({required super.item, super.scrollController})
+    : super(screen: Container());
 }
 
 /// This is automatically generated. This is used to be passed to the
@@ -136,12 +134,11 @@ class NavBarConfig {
     int? selectedIndex,
     List<ItemConfig>? items,
     void Function(int)? onItemSelected,
-  }) =>
-      NavBarConfig(
-        selectedIndex: selectedIndex ?? this.selectedIndex,
-        items: items ?? this.items,
-        onItemSelected: onItemSelected ?? this.onItemSelected,
-      );
+  }) => NavBarConfig(
+    selectedIndex: selectedIndex ?? this.selectedIndex,
+    items: items ?? this.items,
+    onItemSelected: onItemSelected ?? this.onItemSelected,
+  );
 }
 
 class NavigatorConfig {
@@ -177,14 +174,13 @@ class NavigatorConfig {
     String? initialRoute,
     List<NavigatorObserver>? navigatorObservers,
     GlobalKey<NavigatorState>? navigatorKey,
-  }) =>
-      NavigatorConfig(
-        defaultTitle: defaultTitle ?? this.defaultTitle,
-        routes: routes ?? this.routes,
-        onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
-        onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
-        initialRoute: initialRoute ?? this.initialRoute,
-        navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-        navigatorKey: navigatorKey ?? this.navigatorKey,
-      );
+  }) => NavigatorConfig(
+    defaultTitle: defaultTitle ?? this.defaultTitle,
+    routes: routes ?? this.routes,
+    onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
+    onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
+    initialRoute: initialRoute ?? this.initialRoute,
+    navigatorObservers: navigatorObservers ?? this.navigatorObservers,
+    navigatorKey: navigatorKey ?? this.navigatorKey,
+  );
 }

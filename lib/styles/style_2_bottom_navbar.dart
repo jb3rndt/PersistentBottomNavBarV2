@@ -63,23 +63,23 @@ class Style2BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
-        decoration: navBarDecoration,
-        height: height,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: navBarConfig.items.map((item) {
-            final int index = navBarConfig.items.indexOf(item);
-            return InkWell(
-              onTap: () {
-                navBarConfig.onItemSelected(index);
-              },
-              child: _buildItem(
-                item,
-                navBarConfig.selectedIndex == index,
-                MediaQuery.of(context).size.width,
-              ),
-            );
-          }).toList(),
-        ),
-      );
+    decoration: navBarDecoration,
+    height: height,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: navBarConfig.items.map((item) {
+        final int index = navBarConfig.items.indexOf(item);
+        return InkWell(
+          onTap: () {
+            navBarConfig.onItemSelected(index);
+          },
+          child: _buildItem(
+            item,
+            navBarConfig.selectedIndex == index,
+            MediaQuery.of(context).size.width,
+          ),
+        );
+      }).toList(),
+    ),
+  );
 }

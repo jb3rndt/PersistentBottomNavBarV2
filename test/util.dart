@@ -1,92 +1,83 @@
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:go_router/go_router.dart";
+import "package:material_ui/material_ui.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 PersistentTabConfig tabConfig(
   int id,
   Widget screen, [
   ScrollController? scrollController,
-]) =>
-    PersistentTabConfig(
-      screen: screen,
-      scrollController: scrollController,
-      item: ItemConfig(
-        title: "Item$id",
-        icon: Icon(key: Key("Item$id"), Icons.add),
-      ),
-    );
+]) => PersistentTabConfig(
+  screen: screen,
+  scrollController: scrollController,
+  item: ItemConfig(
+    title: "Item$id",
+    icon: Icon(key: Key("Item$id"), Icons.add),
+  ),
+);
 
 Widget defaultScreen(
   int tab, {
   int level = 0,
   void Function(BuildContext)? onTap,
-}) =>
-    Column(
-      children: [
-        Text("Tab $tab"),
-        Text("Level $level"),
-        Builder(
-          builder: (context) => ElevatedButton(
-            onPressed: () {
-              if (onTap != null) {
-                onTap(context);
-                return;
-              }
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => defaultScreen(tab, level: level + 1),
-                ),
-              );
-            },
-            child: const Text("Push Screen"),
-          ),
-        ),
-      ],
-    );
+}) => Column(
+  children: [
+    Text("Tab $tab"),
+    Text("Level $level"),
+    Builder(
+      builder: (context) => ElevatedButton(
+        onPressed: () {
+          if (onTap != null) {
+            onTap(context);
+            return;
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => defaultScreen(tab, level: level + 1),
+            ),
+          );
+        },
+        child: const Text("Push Screen"),
+      ),
+    ),
+  ],
+);
 
 Widget scrollableScreen(
   int tab, {
   int level = 0,
   ScrollController? controller,
   ScrollPhysics? physics,
-}) =>
-    ListView(
-      physics: physics,
-      controller: controller,
-      children: [
-        Text("Tab $tab"),
-        Text("Level $level"),
-        ...List.generate(
-          40,
-          (id) => Container(
-            padding: const EdgeInsets.all(16),
-            child: Text("Item $id"),
-          ),
-        ),
-      ],
-    );
+}) => ListView(
+  physics: physics,
+  controller: controller,
+  children: [
+    Text("Tab $tab"),
+    Text("Level $level"),
+    ...List.generate(
+      40,
+      (id) =>
+          Container(padding: const EdgeInsets.all(16), child: Text("Item $id")),
+    ),
+  ],
+);
 
-List<PersistentTabConfig> tabs([int count = 3]) => List.generate(
-      count,
-      (id) => tabConfig(id, defaultScreen(id)),
-    );
+List<PersistentTabConfig> tabs([int count = 3]) =>
+    List.generate(count, (id) => tabConfig(id, defaultScreen(id)));
 
 List<PersistentRouterTabConfig> routerTabs([
   int count = 3,
   List<ScrollController>? scrollControllers,
-]) =>
-    List.generate(
-      count,
-      (id) => PersistentRouterTabConfig(
-        scrollController:
-            scrollControllers != null ? scrollControllers[id] : null,
-        item: ItemConfig(
-          icon: Icon(key: Key("Item$id"), Icons.add),
-          title: "Item$id",
-        ),
-      ),
-    );
+]) => List.generate(
+  count,
+  (id) => PersistentRouterTabConfig(
+    scrollController: scrollControllers != null ? scrollControllers[id] : null,
+    item: ItemConfig(
+      icon: Icon(key: Key("Item$id"), Icons.add),
+      title: "Item$id",
+    ),
+  ),
+);
 
 Future<void> tapAndroidBackButton(WidgetTester tester) async {
   final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
@@ -105,11 +96,7 @@ Future<void> tapItem(WidgetTester tester, int id) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> scroll(
-  WidgetTester tester,
-  Offset start,
-  Offset moveBy,
-) async {
+Future<void> scroll(WidgetTester tester, Offset start, Offset moveBy) async {
   final gesture = await tester.startGesture(start);
 
   await gesture.moveBy(moveBy);
@@ -136,47 +123,41 @@ void expectMainScreen() {
   expect(find.text("Main Screen"), findsOneWidget);
 }
 
-Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
-      home: Builder(
-        builder: (context) => builder(context),
-      ),
-    );
+Widget wrapTabView(WidgetBuilder builder) =>
+    MaterialApp(home: Builder(builder: (context) => builder(context)));
 
 Widget wrapTabViewWithMainScreen(WidgetBuilder builder) => wrapTabView(
-      (context) => ElevatedButton(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => builder(context),
-          ),
-        ),
-        child: const Text("Main Screen"),
-      ),
-    );
+  (context) => ElevatedButton(
+    onPressed: () =>
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => builder(context))),
+    child: const Text("Main Screen"),
+  ),
+);
 
 GoRouter wrapWithGoRouter(
   Widget Function(BuildContext, GoRouterState, StatefulNavigationShell)?
-      builder, {
+  builder, {
   List<ScrollController>? scrollControllers,
-}) =>
-    GoRouter(
-      initialLocation: "/tab-0",
-      routes: [
-        StatefulShellRoute.indexedStack(
-          builder: builder,
-          branches: List.generate(
-            3,
-            (id) => StatefulShellBranch(
-              initialLocation: "/tab-$id",
-              routes: <RouteBase>[
-                GoRoute(
-                  path: "/tab-$id",
-                  builder: (context, state) => scrollControllers != null
-                      ? scrollableScreen(id, controller: scrollControllers[id])
-                      : defaultScreen(id),
-                ),
-              ],
+}) => GoRouter(
+  initialLocation: "/tab-0",
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: builder,
+      branches: List.generate(
+        3,
+        (id) => StatefulShellBranch(
+          initialLocation: "/tab-$id",
+          routes: <RouteBase>[
+            GoRoute(
+              path: "/tab-$id",
+              builder: (context, state) => scrollControllers != null
+                  ? scrollableScreen(id, controller: scrollControllers[id])
+                  : defaultScreen(id),
             ),
-          ),
+          ],
         ),
-      ],
-    );
+      ),
+    ),
+  ],
+);

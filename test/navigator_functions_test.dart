@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:material_ui/material_ui.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 import "util.dart";
@@ -47,10 +47,8 @@ void main() {
                 id,
                 defaultScreen(
                   id,
-                  onTap: (context) => pushScreen(
-                    context,
-                    screen: defaultScreen(id, level: 1),
-                  ),
+                  onTap: (context) =>
+                      pushScreen(context, screen: defaultScreen(id, level: 1)),
                 ),
               ),
             ),
@@ -142,10 +140,8 @@ void main() {
               id,
               defaultScreen(
                 id,
-                onTap: (context) => pushScreenWithNavBar(
-                  context,
-                  defaultScreen(id, level: 1),
-                ),
+                onTap: (context) =>
+                    pushScreenWithNavBar(context, defaultScreen(id, level: 1)),
               ),
             ),
           ),
@@ -192,8 +188,9 @@ void main() {
     expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
   });
 
-  testWidgets("pushReplacementWithNavBar pushes replacement with navBar",
-      (tester) async {
+  testWidgets("pushReplacementWithNavBar pushes replacement with navBar", (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrapTabView(
         (context) => PersistentTabView(
@@ -241,57 +238,60 @@ void main() {
     expectTab(0);
   });
 
-  testWidgets("pushReplacementWithoutNavBar pushes replacement without navBar",
-      (tester) async {
-    await tester.pumpWidget(
-      wrapTabView(
-        (context) => PersistentTabView(
-          tabs: List.generate(
-            3,
-            (id) => tabConfig(
-              id,
-              defaultScreen(
+  testWidgets(
+    "pushReplacementWithoutNavBar pushes replacement without navBar",
+    (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: List.generate(
+              3,
+              (id) => tabConfig(
                 id,
-                onTap: (context) => pushScreenWithoutNavBar(
-                  context,
-                  defaultScreen(
-                    id,
-                    level: 1,
-                    onTap: (context) => pushReplacementWithoutNavBar(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => defaultScreen(id, level: 2),
+                defaultScreen(
+                  id,
+                  onTap: (context) => pushScreenWithoutNavBar(
+                    context,
+                    defaultScreen(
+                      id,
+                      level: 1,
+                      onTap: (context) => pushReplacementWithoutNavBar(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => defaultScreen(id, level: 2),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
           ),
-          navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
         ),
-      ),
-    );
+      );
 
-    expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
-    expectTab(0);
+      expectTab(0);
 
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
 
-    expectTab(0, level: 2);
-    expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
+      expectTab(0, level: 2);
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
 
-    await tapAndroidBackButton(tester);
-    expectTab(0);
-  });
+      await tapAndroidBackButton(tester);
+      expectTab(0);
+    },
+  );
 
-  testWidgets("popAllScreensOfCurrentTab pops all screens of current tab",
-      (tester) async {
+  testWidgets("popAllScreensOfCurrentTab pops all screens of current tab", (
+    tester,
+  ) async {
     await tester.pumpWidget(
       wrapTabView(
         (context) => PersistentTabView(

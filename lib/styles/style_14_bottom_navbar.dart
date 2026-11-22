@@ -8,9 +8,9 @@ class Style14BottomNavBar extends StatelessWidget {
     this.middleItemSize = 50,
     super.key,
   }) : assert(
-          navBarConfig.items.length.isOdd,
-          "The number of items must be odd for this style",
-        );
+         navBarConfig.items.length.isOdd,
+         "The number of items must be odd for this style",
+       );
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
@@ -18,20 +18,64 @@ class Style14BottomNavBar extends StatelessWidget {
   final double middleItemSize;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      IconTheme(
+        data: IconThemeData(
+          size: item.iconSize,
+          color: isSelected
+              ? item.activeForegroundColor
+              : item.inactiveForegroundColor,
+        ),
+        child: isSelected ? item.icon : item.inactiveIcon,
+      ),
+      if (item.title != null)
+        FittedBox(
+          child: Text(
+            item.title!,
+            style: item.textStyle.apply(
               color: isSelected
                   ? item.activeForegroundColor
                   : item.inactiveForegroundColor,
             ),
+          ),
+        ),
+    ],
+  );
+
+  Widget _buildMiddleItem(
+    BuildContext context,
+    ItemConfig item,
+    bool isSelected,
+  ) => Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Container(
+        width: middleItemSize,
+        height: middleItemSize,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: item.activeForegroundColor,
+          boxShadow: navBarDecoration.boxShadow,
+        ),
+        child: Center(
+          child: IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: item.inactiveForegroundColor,
+            ),
             child: isSelected ? item.icon : item.inactiveIcon,
           ),
-          if (item.title != null)
-            FittedBox(
+        ),
+      ),
+      if (item.title != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: FittedBox(
               child: Text(
                 item.title!,
                 style: item.textStyle.apply(
@@ -41,55 +85,10 @@ class Style14BottomNavBar extends StatelessWidget {
                 ),
               ),
             ),
-        ],
-      );
-
-  Widget _buildMiddleItem(
-    BuildContext context,
-    ItemConfig item,
-    bool isSelected,
-  ) =>
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: middleItemSize,
-            height: middleItemSize,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: item.activeForegroundColor,
-              boxShadow: navBarDecoration.boxShadow,
-            ),
-            child: Center(
-              child: IconTheme(
-                data: IconThemeData(
-                  size: item.iconSize,
-                  color: item.inactiveForegroundColor,
-                ),
-                child: isSelected ? item.icon : item.inactiveIcon,
-              ),
-            ),
           ),
-          if (item.title != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                      color: isSelected
-                          ? item.activeForegroundColor
-                          : item.inactiveForegroundColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {

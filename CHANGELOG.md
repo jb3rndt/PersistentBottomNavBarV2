@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2026-11-21
+### Changed
+- migrate from deprecated `package:flutter/material.dart` and `package:flutter/cupertino.dart` imports to `package:material_ui/material_ui.dart` and `package:cupertino_ui/cupertino_ui.dart`
+- require Dart 3.13.0 and Flutter 3.47.0 or newer
+
 ## [6.5.0] - 2026-10-11
 ## [6.4.0] - 2026-08-11
 ### Changed
@@ -112,7 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.0.0] - 2024-03-13
 ### Added
-- Easier and less error-prone usage api ([MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md))
+- Easier and less error-prone usage api ([MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/main/MigrationGuide.md))
 - Support for go\_router
 - Change the tab by sliding left/right (if enabled)
 
@@ -637,6 +642,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[7.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/6.5.0...7.0.0
 [6.5.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/6.4.0...6.5.0
 [6.4.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/6.3.2...6.4.0
 [6.3.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/6.3.1...6.3.2

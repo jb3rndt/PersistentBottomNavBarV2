@@ -14,34 +14,31 @@ class DecoratedNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Stack(
-        children: [
-          if ((decoration.color?.a ?? 1) < 1 && decoration.filter != null)
-            Positioned.fill(
-              child: ClipRect(
-                child: BackdropFilter(
-                  // for previous flutter versions, BackdropFilter.filter is not nullable, so we need to ignore the null check here (which is included in the above if statement anyway)
-                  // ignore: unnecessary_null_checks
-                  filter: decoration.filter!,
-                  child: Container(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-            ),
-          DecoratedBox(
-            decoration: decoration,
-            child: SafeArea(
-              top: false,
-              right: false,
-              left: false,
-              child: Container(
-                padding: decoration.padding,
-                height:
-                    height != null ? height! - decoration.borderHeight() : null,
-                child: child,
-              ),
+    children: [
+      if ((decoration.color?.a ?? 1) < 1 && decoration.filter != null)
+        Positioned.fill(
+          child: ClipRect(
+            child: BackdropFilter(
+              // for previous flutter versions, BackdropFilter.filter is not nullable, so we need to ignore the null check here (which is included in the above if statement anyway)
+              // ignore: unnecessary_null_checks
+              filter: decoration.filter!,
+              child: Container(color: Colors.transparent),
             ),
           ),
-        ],
-      );
+        ),
+      DecoratedBox(
+        decoration: decoration,
+        child: SafeArea(
+          top: false,
+          right: false,
+          left: false,
+          child: Container(
+            padding: decoration.padding,
+            height: height != null ? height! - decoration.borderHeight() : null,
+            child: child,
+          ),
+        ),
+      ),
+    ],
+  );
 }

@@ -59,8 +59,8 @@ class PersistentTabView extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
-  })  : screenTransitionAnimation = const ScreenTransitionAnimation(),
-        controller = null;
+  }) : screenTransitionAnimation = const ScreenTransitionAnimation(),
+       controller = null;
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;
@@ -227,7 +227,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   void initState() {
     super.initState();
 
-    _controller = widget.controller ??
+    _controller =
+        widget.controller ??
         PersistentTabController(
           initialIndex: widget.navigationShell?.currentIndex ?? 0,
         );
@@ -248,8 +249,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        tryGetAnimatedIconWrapperState(_controller.index)
-            ?.controller
+        tryGetAnimatedIconWrapperState(_controller.index)?.controller
             .animateTo(1, duration: Duration.zero);
       }
     });
@@ -303,40 +303,41 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     final screen = widget.tabs[index].screen;
     return CustomTabView(
       key: _tabKeys[index],
-      navigatorConfig: widget.tabs[index].navigatorConfig
-          .copyWith(navigatorKey: _navigatorKeys[index]),
+      navigatorConfig: widget.tabs[index].navigatorConfig.copyWith(
+        navigatorKey: _navigatorKeys[index],
+      ),
       home: (context) => screen,
     );
   }
 
   Widget navigationBarWidget() => PersistentTabViewScaffold(
-        controller: _controller,
-        hideNavigationBar: widget.hideNavigationBar,
-        hideOnScrollVelocity: widget.hideOnScrollVelocity,
-        tabCount: widget.tabs.length,
-        stateManagement: widget.stateManagement,
-        backgroundColor: widget.backgroundColor,
-        navBarOverlap: widget.navBarOverlap,
-        screenTransitionAnimation: widget.screenTransitionAnimation,
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        avoidBottomPadding: widget.avoidBottomPadding,
-        margin: widget.margin,
-        floatingActionButton: widget.floatingActionButton,
-        floatingActionButtonLocation: widget.floatingActionButtonLocation,
-        drawer: widget.drawer,
-        drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
-        gestureNavigationEnabled: widget.gestureNavigationEnabled,
-        tabBuilder: (context, index) => _buildScreen(index),
-        animatedTabBuilder: widget.animatedTabBuilder,
-        navigationShell: widget.navigationShell,
-        tabBar: widget.navBarBuilder(
-          NavBarConfig(
-            selectedIndex: _controller.index,
-            items: widget.tabs.map((e) => e.item).toList(),
-            onItemSelected: onItemSelected,
-          ),
-        ),
-      );
+    controller: _controller,
+    hideNavigationBar: widget.hideNavigationBar,
+    hideOnScrollVelocity: widget.hideOnScrollVelocity,
+    tabCount: widget.tabs.length,
+    stateManagement: widget.stateManagement,
+    backgroundColor: widget.backgroundColor,
+    navBarOverlap: widget.navBarOverlap,
+    screenTransitionAnimation: widget.screenTransitionAnimation,
+    resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+    avoidBottomPadding: widget.avoidBottomPadding,
+    margin: widget.margin,
+    floatingActionButton: widget.floatingActionButton,
+    floatingActionButtonLocation: widget.floatingActionButtonLocation,
+    drawer: widget.drawer,
+    drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+    gestureNavigationEnabled: widget.gestureNavigationEnabled,
+    tabBuilder: (context, index) => _buildScreen(index),
+    animatedTabBuilder: widget.animatedTabBuilder,
+    navigationShell: widget.navigationShell,
+    tabBar: widget.navBarBuilder(
+      NavBarConfig(
+        selectedIndex: _controller.index,
+        items: widget.tabs.map((e) => e.item).toList(),
+        onItemSelected: onItemSelected,
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -351,8 +352,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         },
         child: NotificationListener<NavigationNotification>(
           onNotification: (notification) {
-            final newCanPop =
-                calcCanPop(subtreeCantHandlePop: !notification.canHandlePop);
+            final newCanPop = calcCanPop(
+              subtreeCantHandlePop: !notification.canHandlePop,
+            );
             if (newCanPop != canPop) {
               setState(() {
                 canPop = newCanPop;
@@ -389,7 +391,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         index,
         initialLocation:
             widget.selectedTabPressConfig.popAction == PopActionType.all &&
-                isSameTab,
+            isSameTab,
       );
       return;
     }
@@ -402,9 +404,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       final canPopScreens = _currentNavigatorState()?.canPop() ?? false;
       widget.selectedTabPressConfig.onPressed?.call(canPopScreens);
       if (canPopScreens) {
-        popScreensAccodingToAction(
-          widget.selectedTabPressConfig.popAction,
-        );
+        popScreensAccodingToAction(widget.selectedTabPressConfig.popAction);
       } else {
         if (widget.selectedTabPressConfig.scrollToTop) {
           tryScrollToTop(index);
@@ -454,15 +454,15 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   bool calcCanPop({bool? subtreeCantHandlePop}) =>
       widget.handleAndroidBackButtonPress &&
       _controller.historyIsEmpty() &&
-      _currentNavigatorState() !=
-          null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
+      _currentNavigatorState() != null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ?? !(_currentNavigatorState()?.canPop() ?? false));
 
   AnimatedIconWrapperState? tryGetAnimatedIconWrapperState(int index) {
     if (index < widget.tabs.length &&
         widget.tabs[index].item.icon is AnimatedIconWrapper) {
-      final key = widget.tabs[index].item.icon.key!
-          as GlobalKey<AnimatedIconWrapperState>;
+      final key =
+          widget.tabs[index].item.icon.key!
+              as GlobalKey<AnimatedIconWrapperState>;
       return key.currentState;
     }
     return null;

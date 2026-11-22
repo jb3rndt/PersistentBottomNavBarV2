@@ -4,4 +4,4 @@ This is an example project which demonstrates the use of `persistent_bottom_nav_
 
 ## Getting Started
 
-Head over to the [official readme](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/README.md) to get started.
+Head over to the [official readme](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/main/README.md) to get started.
